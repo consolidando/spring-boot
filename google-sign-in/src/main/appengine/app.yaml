@@ -1,0 +1,9 @@
+runtime: java17
+automatic_scaling:
+  max_idle_instances: 1
+  max_concurrent_requests: 10
+  max_instances: 2
+  
+env_variables:
+  CLIENT-ID: ${CLIENT-ID}
+  CLIENT-SECRET: ${CLIENT-SECRET}
