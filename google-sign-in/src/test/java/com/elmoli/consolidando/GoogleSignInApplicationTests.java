@@ -16,17 +16,6 @@ class GoogleSignInApplicationTests
     final String invalidTokenString = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
     @Test
-    public void testRedirectionWhenAccessUsersWithoutIDToken()
-    {
-        webTestClient
-                .get().uri("/users")
-                .exchange()
-                .expectStatus()
-                .is3xxRedirection()
-                .expectHeader().valueMatches(HttpHeaders.LOCATION, ".*\\/index\\.html\\?v=2$");
-    }
-
-    @Test
     public void testInvalidIDToken()
     {
 
@@ -38,5 +27,17 @@ class GoogleSignInApplicationTests
                 .expectHeader().valueMatches(HttpHeaders.WWW_AUTHENTICATE, 
                         "Bearer error=\"invalid_token\",.*");
     }
+
+    @Test
+    public void testRedirectionWhenAccessUsersWithoutIDToken()
+    {
+        webTestClient
+                .get().uri("/users")
+                .exchange()
+                .expectStatus()
+                .is3xxRedirection()
+                .expectHeader().valueMatches(HttpHeaders.LOCATION, ".*\\/index\\.html\\?v=2$");
+    }
+
 
 }
