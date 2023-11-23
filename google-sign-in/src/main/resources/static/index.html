@@ -7,8 +7,8 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width" />
         <base href="/" />
-        <link rel="stylesheet" type="text/css" href="main.css" />
-        <script src="main.js"></script>
+        <link rel="stylesheet" type="text/css" href="main.css?v=2" />
+        <script src="main.js?v=2"></script>
     </head>
     <body>
         <main>
@@ -49,6 +49,7 @@
         <footer style="text-align:center;">© 2023 <a href="https://diy.elmolidelanoguera.com">Consolidando</a></footer>
 
         <script>
+            warmupRequest();
             loadGoogleIdentityAndRenderSignInButton("signInButton")
                     .then(() =>
                     {

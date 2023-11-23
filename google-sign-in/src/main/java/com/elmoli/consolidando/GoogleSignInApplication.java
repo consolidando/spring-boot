@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableWebSecurity
 public class GoogleSignInApplication
 {
+    final String RESOURCE_USERS = "/users";
 
-    @GetMapping("/user")
-    public Principal user(Principal principal)
+    @GetMapping(RESOURCE_USERS)
+    public Principal users(Principal principal)
     {
         return principal;
     }
@@ -30,9 +31,14 @@ public class GoogleSignInApplication
     {
         http
                 .authorizeHttpRequests((request)
-                        -> request.requestMatchers("/user").authenticated()
+                        -> request.requestMatchers(RESOURCE_USERS).authenticated()
                         .anyRequest().permitAll()
                 )
+                .exceptionHandling(exception
+                        -> exception.authenticationEntryPoint(
+                        (request, response, authException)
+                        -> response.sendRedirect("/index.html?v=2")
+                ))
                 .oauth2ResourceServer((oauth2ResourceServer)
                         -> oauth2ResourceServer.jwt(Customizer.withDefaults())
                 )

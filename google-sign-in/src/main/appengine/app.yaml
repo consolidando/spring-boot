@@ -3,7 +3,19 @@ automatic_scaling:
   max_idle_instances: 1
   max_concurrent_requests: 10
   max_instances: 2
-  
-env_variables:
-  CLIENT-ID: ${CLIENT-ID}
-  CLIENT-SECRET: ${CLIENT-SECRET}
+
+handlers:
+- url: (/.*\.(gif|png|jpg|svg|ico|css|js|html))
+  static_files: __static__\0
+  upload: __NOT_USED__
+  require_matching_file: true
+  login: optional
+  secure: optional
+  expiration: 7d
+- url: /
+  static_files: __static__/index.html
+  upload: __NOT_USED__
+  require_matching_file: true
+  login: optional
+  secure: optional
+  expiration: 0d

@@ -1,4 +1,5 @@
 const _GOOGLE_CLIENT_ID = '555980883878-490o9l11t3p4m32sg7oo3rg9tvu81lm6.apps.googleusercontent.com';
+const _USER_RESOURCE = "/users";
 
 let _token = null;
 let _decode_token_payload = null;
@@ -97,7 +98,7 @@ function checkUserAuthenticationInTheServer()
 {
     return new Promise((resolve, reject) =>
     {
-        fetch("/user",
+        fetch(_USER_RESOURCE,
                 {
                     headers: {
                         Authorization: `Bearer ${_token}`
@@ -107,6 +108,11 @@ function checkUserAuthenticationInTheServer()
                 .then(data => resolve(data))                
                 .catch(error => reject(error));                
     });
+}
+
+function warmupRequest()
+{
+    fetch("/warmup");    
 }
 
 function generateHTMLFromObject(obj, indent = 0) 
