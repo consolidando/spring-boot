@@ -1,0 +1,4 @@
+# Spring Boot REST + Google Sign In + Google Datastore
+A previously authenticated user using the Google Identity authorization server will be allowed to sign up for our Consolidating application by entering relevant information, including an image. Part of the user information will be accessible publicly through an API.
+
+To create the application, we will use Spring Boot. With Spring Data REST, we will create the API, use Google Cloud Storage to save the image, and Google Datastore to store user information. We will also document our API with springdoc-openapi and Swagger UI. Additionally, we discuss how to implement caching on the server and in the browser.
