@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2023 joanribalta@elmolidelanoguera.com
+ * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+ * Blog Consolidando: https://diy.elmolidelanoguera.com/
+ */
+
+
 const _GOOGLE_CLIENT_ID = '555980883878-490o9l11t3p4m32sg7oo3rg9tvu81lm6.apps.googleusercontent.com';
 const _USER_RESOURCE = "/users";
 

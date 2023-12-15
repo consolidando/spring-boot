@@ -1,12 +1,12 @@
 spring:
   security:
     oauth2:
-      client:
-        registration:
-          google:
-            client-id: @client.id@
-            client-secret: @client.secret@
-            scope: openid,profile,email
+#      client:
+#        registration:
+#          google:
+#            client-id: @client.id@
+#            client-secret: @client.secret@
+#            scope: openid,profile,email
       resourceserver:
         jwt:
           issuer-uri: https://accounts.google.com
@@ -14,4 +14,6 @@ spring:
 
 logging:
   level:
-    org.springframework.security: DEBUG
+    org:
+      springframework:
+        security: DEBUG
