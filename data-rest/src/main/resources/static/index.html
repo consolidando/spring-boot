@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Consolidando - Spring Data Rest</title>
+        <meta name="author" content="joanribalta@elmolidelanoguera.com">
+        <meta name="license" content="CC BY-NC-ND 4.0">
+        <meta name="blog" content="https://diy.elmolidelanoguera.com/">
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width" />
+        <base href="/" />
+        <link rel="stylesheet" type="text/css" href="main.css?v=4" />
+        <script src="users.js?v=4"></script>
+        <script src="index.js?v=4"></script>
+    </head>
+    <body>
+        <main>
+            <h1>Spring Data Rest</h1>
+
+
+            <p>This is a demonstration of how to use a Google ID Token to authorize
+                access to a resource on a server.</p>
+
+            <h2>Technologies</h2>
+            <ul>
+                <li><strong>Spring Boot</strong></li>
+                <li><strong>Google Sign In</strong></li>
+                <li><strong>Google Storage</strong></li>
+                <li><strong>Google Datastore</strong></li>
+            </ul>
+
+
+            <h2>Authentication with Google Identity - Sign In</h2>
+            <div id="notauthenticatedyet">
+                <span id="signInButton"></span>
+            </div>
+            <div id="authenticated" style="display: none;">
+
+                <div class="block">
+                    <h3>Token: </h3>
+                    <div>
+                        <span id="token" style="overflow-wrap: break-word;"></span>
+                    </div>
+
+                    <p>
+                        The received token belongs to <strong><span id="owner"></span>
+                        </strong> with email <strong><span id="email"></span></strong>.
+                    </p>
+                </div>
+
+                <h2>Authorization of a Resource in Spring Server</h2>
+
+                <p>This ID Token allows us to access a <strong>resource user</strong> on a Spring server, which returns the <strong>Principal</strong>
+                    once the server has verified the token's signature against the Google authorization server.</p>
+
+                <h2>Get Users</h2>
+                <div style="display: flex; flex-direction: row;">
+                    <button id="getusers" disabled>Get Users</button>                   
+                </div>
+
+                <div id="result1" style="display: none;">    
+                    <h3 >Result</h3>
+                    <div id="getusersresult" class="block"></div>
+                </div>
+
+                <br>
+                <h2>Create Users</h2>
+                <div style="display: flex; flex-direction: row;">
+                    <button id="createuser" disabled>Create User</button>                   
+                </div>
+
+                <div id="result2" style="display: none;">    
+                    <h3 >Result</h3>
+                    <div id="createuserresult" class="block"></div>
+                </div>
+
+            </div>
+        </main>
+
+        <footer style="text-align:center;">© 2023 <a href="https://diy.elmolidelanoguera.com">Consolidando</a></footer>
+
+        <script>
+            indexStartUp();
+        </script>
+    </body>
+</html>

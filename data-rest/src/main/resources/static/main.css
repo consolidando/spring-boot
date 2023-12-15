@@ -1,0 +1,39 @@
+/*
+ * Copyright (c) 2023 joanribalta@elmolidelanoguera.com
+ * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+ * Blog Consolidando: https://diy.elmolidelanoguera.com/
+ */
+
+:root 
+{
+    font-size: 18px;
+    margin: 0em 1em;
+    color: darkblue;
+}    
+
+body 
+{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+footer 
+{
+  margin-top: auto;
+  margin-bottom: 2em;
+}
+
+footer a
+{
+    text-decoration: none;
+}
+
+.block
+{
+    background-color: lightgray;
+    margin: 1em 0em;;
+    padding: 1em;
+    border-radius: 10px;
+}
+

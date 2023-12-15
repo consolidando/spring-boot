@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: data-rest
+  servlet:
+    multipart:
+      max-file-size: 128KB
+      max-request-size: 128KB
+  security:
+    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: @client.id@
+#            client-secret: @client.secret@
+#            scope: openid,profile,email
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
+          jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+  cloud:
+    gcp:
+      datastore:
+        namespace: spring-demo
+    project-id: emp-2022
+#    logging:
+#      enabled: true
+  data:
+    rest:
+      base-path: /apis
+  main:
+    allow-circular-references: true
+  profile:
+    active: test_user
+ 
+springdoc:
+  api-docs:
+    path: /apis-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true    
+    
+data-rest:
+  admin:
+    emails: @admin.emails@
+  storage:
+    bucketName: @storage.bucketName@
+    
+logging:
+  level:
+    root: WARN
+    org:
+      springframework:
+        security: WARN
