@@ -3,7 +3,6 @@
  * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
-
 package com.elmoli.consolidando.datarest.storage;
 
 import com.google.cloud.ReadChannel;
@@ -32,7 +31,7 @@ public class StorageService
 
     @Autowired
     private Storage storage;
-    
+
     @Value("${data-rest.storage.bucketName}")
     public String bucketName;
 
@@ -41,56 +40,82 @@ public class StorageService
         return (BlobId.of(bucketName, fileName));
     }
 
-    public InputStream read(String fileName) throws IOException
+    public InputStream read(String fileName) throws StorageReadingException
     {
         try (ReadChannel reader = storage.reader(getBlobId(fileName)))
         {
             return Channels.newInputStream(reader);
         } catch (StorageException e)
-        {           
-            throw new IOException("Error reading file from storage", e);
+        {
+            throw new StorageReadingException(fileName, e);
         }
     }
 
-    public String save(String fileName, InputStream file) throws IOException
+    public String save(String fileName, InputStream file)
     {
-        BlobInfo blobInfo = BlobInfo.newBuilder(getBlobId(fileName))
-                //.setAcl(publicAccess)
-                //                .setContentType("image/jpg")
-                //                .setCacheControl("no-cache")
-                .build();
-        
-                
-        Blob blob = storage.createFrom(blobInfo, file);
+        String mediaLink = null;
+        try
+        {
+            BlobInfo blobInfo = BlobInfo.newBuilder(getBlobId(fileName))
+                    //.setAcl(publicAccess)
+                    //                .setContentType("image/jpg")
+                    //                .setCacheControl("no-cache")
+                    .build();
+
+            Blob blob = storage.createFrom(blobInfo, file);
+
+            mediaLink = blob.getMediaLink();
+
+        } catch (IOException e)
+        {
+            throw new StorageWritingException(fileName, e);
+        }
 
         // includes generation query parameter that changes each update
-        return (blob.getMediaLink());
+        return (mediaLink);
     }
 
     public String rename(String sourceFileName, String targetFileName)
     {
-        BlobId source = getBlobId(sourceFileName);
-        BlobId target = getBlobId(targetFileName);
+        String mediaLink = null;
+        try
+        {
+            BlobId source = getBlobId(sourceFileName);
+            BlobId target = getBlobId(targetFileName);
 
-        CopyWriter copyWriter
-                = storage.copy(
-                        Storage.CopyRequest.newBuilder()
-                                .setSource(source)
-                                .setTarget(target,
-                                        Storage.BlobTargetOption.predefinedAcl(
-                                                Storage.PredefinedAcl.PUBLIC_READ)
-                                ).build());
+            CopyWriter copyWriter
+                    = storage.copy(
+                            Storage.CopyRequest.newBuilder()
+                                    .setSource(source)
+                                    .setTarget(target,
+                                            Storage.BlobTargetOption.predefinedAcl(
+                                                    Storage.PredefinedAcl.PUBLIC_READ)
+                                    ).build());
 
-        storage.get(source).delete();
+            storage.get(source).delete();
+            mediaLink = copyWriter.getResult().getMediaLink();
 
-        return (copyWriter.getResult().getMediaLink());
+        } catch (StorageException e)
+        {
+            throw new StorageRenamingException(sourceFileName, e);
+        }
+
+        return (mediaLink);
     }
-    
+
     public String getMediaLink(String fileName)
     {
+        String mediaLink = null;
+        
         BlobId blobId = getBlobId(fileName);
         Blob blob = storage.get(blobId);
-        return(blob.getMediaLink());
+        
+        if (blob != null)
+        {
+            mediaLink = blob.getMediaLink();
+        }
+                
+        return (mediaLink);
     }
 
     public boolean exists(String FileName)

@@ -6,18 +6,14 @@
 
 package com.elmoli.consolidando.datarest.domain;
 
-import org.springframework.data.rest.core.config.Projection;
-
 /**
  *
  * @author joanr
  */
-@Projection(name = "userProjection", types = { User.class })
-public interface UserProjection
+public record UserId(String id)
 {
-    String getId();
-    String getName();
-    String getDescription();
-    String getPicture();
-    String getWeb();
+    static public UserId of(String id)
+    {
+        return(new UserId(id));
+    }
 }

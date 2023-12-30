@@ -1,6 +1,18 @@
+server:
+  error:
+    include-message: always
+    include-stacktrace: always
+    whitelabel: 
+      enabled: true      
+    include-exception: true
+    include-binding-errors: always  
+
+
 spring:
   application:
     name: data-rest
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration    
   servlet:
     multipart:
       max-file-size: 128KB
@@ -27,10 +39,17 @@ spring:
   data:
     rest:
       base-path: /apis
-  main:
-    allow-circular-references: true
+#      returnBodyOnUpdate: true
+#      returnBodyOnCreate: true
+      
+#  main:
+#    allow-circular-references: true
   profile:
-    active: test_user
+    active: test_user    
+  mvc:
+    problemdetails:
+      enabled: true      
+ #     throw-exception-if-no-handler-found: true
  
 springdoc:
   api-docs:
@@ -47,7 +66,20 @@ data-rest:
     
 logging:
   level:
-    root: WARN
-    org:
-      springframework:
-        security: WARN
+    root: OFF
+#    org:
+#      springframework:
+#        security: TRACE
+#        data:
+#          rest: OFF  
+#        web: TRACE                
+#      apache:
+#        tomcat: OFF
+#        catalina: OFF
+#      springdoc: OFF
+#    io:
+#      swagger: OFF
+      
+
+
+          

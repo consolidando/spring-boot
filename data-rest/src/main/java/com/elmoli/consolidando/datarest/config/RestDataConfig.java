@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
  * @author joanr
  */
 @Configuration
-public class RestConfig implements RepositoryRestConfigurer
+public class RestDataConfig implements RepositoryRestConfigurer
 {
 
     @Override

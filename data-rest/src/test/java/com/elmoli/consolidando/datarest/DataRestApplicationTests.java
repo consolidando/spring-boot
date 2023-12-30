@@ -62,7 +62,7 @@ class DataRestApplicationTests
         Map mapObject = objectMapper.readValue(result.getResponse().getContentAsString(), Map.class);
         id = (String) mapObject.get("id");        
 
-        // deletes user temporary files of previous connections ---------------------
+        // deletes user temporary files of previous connections ----------------
         String path = "/apis/users/%s".formatted(id);
         mvc.perform(delete(path));
 
@@ -86,11 +86,15 @@ class DataRestApplicationTests
 
         ObjectMapper objectMapper2 = new ObjectMapper();
         Map mapObject2 = objectMapper2.readValue(result.getResponse().getContentAsString(), Map.class);
-        String mediaLink = (String) mapObject2.get("mediaLink");  
+        String mediaLink = (String) mapObject2.get("picture");  
 
         // creates user new user adding previous temporary image ---------------
         path = "/apis/users/%s".formatted(id);
-        User user = new User(TEST_EMAIL, "Test Name", "Test Family Name", mediaLink);
+        User user = new User(TEST_EMAIL, 
+                "Test Name", 
+                "Test Description", 
+                mediaLink,
+                "https://test.test.com/");
         
         // 
         result = mvc.perform(put(path)

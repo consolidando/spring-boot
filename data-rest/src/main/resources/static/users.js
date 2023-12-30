@@ -78,7 +78,8 @@ function _usersGetTokenAndPayload(response)
     _usersToken = response.credential;
     //
     const base64Payload = response.credential.split('.')[1];
-    _usersDecodeTokenPayload = JSON.parse(atob(base64Payload));
+    _usersDecodeTokenPayload = JSON.parse( 
+            decodeURIComponent(escape(atob(base64Payload))));
 
     // 
     console.log("Id Token: " + _usersToken);
@@ -120,7 +121,7 @@ function usersGetId(email) {
                     }
                     return response.json();
                 })
-                .then(data => resolve(data.email))
+                .then(data => resolve(data.id))
                 .catch(error => reject(error));
     });
 }
@@ -134,7 +135,7 @@ function usersGet() {
                     headers:
                             {
                                 'Content-Type': 'application/json',
-                                Authorization: `Bearer ${_usersToken}`
+    //                            Authorization: `Bearer ${_usersToken}`
                             }
                 })
                 .then(response =>
@@ -157,8 +158,8 @@ function usersCreate(id, user)
         fetch(_USERS_RESOURCE + "/" + id,
                 {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
+                    headers: {                        
+                        'Content-Type': 'application/json',                        
                         Authorization: `Bearer ${_usersToken}`
                     },
                     body: JSON.stringify(user)
@@ -179,7 +180,13 @@ function usersCreate(id, user)
 
 function usersWarmupRequest()
 {
-    fetch("/warmup");
+     fetch("/warmup", {
+//        mode: 'no-cors',
+        headers: {
+//            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+//            'Sec-Fetch-Mode': "navigate"
+        }
+    });
 }
 
 function usersGenerateHTMLFromObject(obj, indent = 0)

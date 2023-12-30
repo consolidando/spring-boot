@@ -6,18 +6,15 @@
 
 package com.elmoli.consolidando.datarest.domain;
 
-import org.springframework.data.rest.core.config.Projection;
-
 /**
  *
  * @author joanr
  */
-@Projection(name = "userProjection", types = { User.class })
-public interface UserProjection
+public class UserIdException extends RuntimeException
 {
-    String getId();
-    String getName();
-    String getDescription();
-    String getPicture();
-    String getWeb();
+
+    public UserIdException()
+    {
+        super("The user email does not correspond to the path id.");
+    }
 }

@@ -6,18 +6,14 @@
 
 package com.elmoli.consolidando.datarest.domain;
 
-import org.springframework.data.rest.core.config.Projection;
-
 /**
  *
  * @author joanr
  */
-@Projection(name = "userProjection", types = { User.class })
-public interface UserProjection
-{
-    String getId();
-    String getName();
-    String getDescription();
-    String getPicture();
-    String getWeb();
+public class UserPictureNotFoundException extends RuntimeException
+{    
+    public UserPictureNotFoundException(String pictureName)
+    {
+        super("User picture " + pictureName  + " not found");
+    }
 }

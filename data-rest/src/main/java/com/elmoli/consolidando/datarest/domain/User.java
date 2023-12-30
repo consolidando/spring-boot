@@ -7,7 +7,9 @@
 package com.elmoli.consolidando.datarest.domain;
 
 import com.google.cloud.spring.data.datastore.core.mapping.Entity;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Base64;
 import lombok.AllArgsConstructor;
@@ -33,17 +35,25 @@ public class User
     @Id
     private String id;
 
+    @Email(message = "Email should be valid.")
     @NotBlank(message = "email must be defined.")
     private String email;
 
-    @NotBlank(message = "User name must be defined.")
+    @Size(min = 5, max = 25, message = "Publisher name must be between 5 and 25 characters.")
+    @NotBlank(message = "Publisher name must be defined.")
     private String name;
 
-    @NotBlank(message = "Family name must be defined.")
-    private String familyName;
+    @Size(min = 5, max = 25, message = "Publisher description must be between 5 and 25 characters.")
+    @NotBlank(message = "Publisher description must be defined.")
+    private String description;
 
-    @NotBlank(message = "MediaLink must be defined.")
-    private String mediaLink;
+    @NotBlank(message = "Publisher picture must be defined.")
+    @URLValidator(message = "Publisher picture must be a valid URL.")
+    private String picture;
+    
+    @NotBlank(message = "Publisher web must be defined.")
+    @URLValidator(message = "Publisher web must be a valid URL.")
+    private String web;
 
     @CreatedDate
     private Instant createdDate;
@@ -57,12 +67,13 @@ public class User
     @Version
     private int version;
 
-    public User(String email, String name, String familyName, String mediaLink)
+    public User(String email, String name, String description, String picture, String web)
     {
         this.email = email;
         this.name = name;
-        this.familyName = familyName;   
-        this.mediaLink = mediaLink;
+        this.description = description;   
+        this.picture = picture;
+        this.web = web;
     }
 
     static public String getIdFromEmail(String email)

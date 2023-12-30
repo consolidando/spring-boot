@@ -4,7 +4,7 @@
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
 
-let _indexcCurrentUserId;
+let _indexCurrentUserId;
 
 function indexStartUp()
 {
@@ -30,7 +30,7 @@ function indexStartUp()
                 createuser.onclick = _onIndexCreateUser;
                 createuser.disabled = false;
                 //
-                _indexcCurrentUserId = id;
+                _indexCurrentUserId = id;
             });
 }
 
@@ -41,10 +41,12 @@ function _onIndexCreateUser()
     const user =
             {
                 email: usersGetEmail(),
-                name: 'tets',
-                familyName: 'test_family'
+                name: 'tets 5',
+                description: 'test description',
+                web: 'https://test.test.com',
+                picture: 'https://test.test.com/picture.jpg'
             };
-    usersCreate(_indexcCurrentUserId, user)
+    usersCreate(_indexCurrentUserId, user)
             .then((data) =>
             {
                 document.getElementById("createuserresult").innerHTML

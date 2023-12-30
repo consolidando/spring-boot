@@ -34,7 +34,7 @@ public class OpenApiConfig
     public OpenAPI userDatabaseOpenAPI()
     {
         return new OpenAPI()
-                .info(new Info().title("Consolidando User REST API")
+                .info(new Info().title("Consolidando Users REST API")
                         .description("This API allows users to register on the Consolidando website.")
                         .license(new License()
                                 .name("Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License")

@@ -3,30 +3,40 @@
  * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
-
 package com.elmoli.consolidando.datarest.web;
 
 import com.elmoli.consolidando.datarest.config.CachingConfig;
 import com.elmoli.consolidando.datarest.domain.User;
+import com.elmoli.consolidando.datarest.domain.UserEmail;
+import com.elmoli.consolidando.datarest.domain.UserId;
+import com.elmoli.consolidando.datarest.domain.UserIdException;
+import com.elmoli.consolidando.datarest.domain.UserPicture;
+import com.elmoli.consolidando.datarest.domain.UserNotFoundException;
+import com.elmoli.consolidando.datarest.domain.UserPictureNotFoundException;
 import com.elmoli.consolidando.datarest.domain.UserRepository;
 import com.elmoli.consolidando.datarest.security.SecurityService;
 import com.elmoli.consolidando.datarest.storage.StorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.Map;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,96 +74,143 @@ public class UserController
     }
 
     // -------------------------------------------------------------------------
+    @Tag(name = "Get User ID")
     @Operation(
-            summary = "Gets the ID of the authenticated user.",
+            summary = "Gets the User ID of the authenticated user.",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @GetMapping("users/id")
-    public ResponseEntity<?> getUserId()
+    public ResponseEntity<UserId> getUserId()
     {
         String tokenEmail = securityService.getPrincipalEmail();
         String id = User.getIdFromEmail(tokenEmail);
 
-        return (ResponseEntity.ok().body(Collections.singletonMap("id", id)));
-
+        return (ResponseEntity.ok().body(UserId.of(id)));
     }
 
     // -------------------------------------------------------------------------
+    @Tag(name = "Get User ID")
     @Operation(
-            summary = "Gets the ID of the post body user email.",
+            summary = "Retrieves the User ID associated with the email provided in the post body.",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @PostMapping("users/id")
-    public ResponseEntity<?> getUserIdbyPost(@RequestBody Map map)
+    public ResponseEntity<UserId> getUserIdbyPost(@RequestBody UserEmail userEmail)
     {
-        String bodyEmail = (String) map.get("email");
-        String id = User.getIdFromEmail(bodyEmail);
-
-        return (ResponseEntity.ok().body(Collections.singletonMap("id", id)));
-
+        String id = User.getIdFromEmail(userEmail.email());
+        return (ResponseEntity.ok().body(UserId.of(id)));
     }
 
     // -------------------------------------------------------------------------
     @Operation(
-            summary = "Gets User Entity",
+            summary = "Gets User Info.",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @GetMapping("users/{id}")
     @PreAuthorize("@securityService.isAuthorized(#id)")
     public ResponseEntity<?> getUser(@PathVariable String id)
-            throws IOException
     {
         Optional<User> optional = userRepository.findById(id);
 
-        if (optional.isPresent())
+        if (!optional.isPresent())
         {
-            User user = optional.get();
-            return ResponseEntity.ok().body(user);
+            throw new UserNotFoundException(id);
+        }
+
+        User user = optional.get();
+        return ResponseEntity.ok().body(user);
+    }
+
+    /**
+     * Moves the user's picture to the final location if necessary.
+     *
+     * @param user The user whose picture needs to be checked and, if necessary,
+     * moved.
+     * @param id The ID of the user to construct image names.
+     * @return The URL of the picture after the possible move operation.
+     * @throws UserPictureNotFoundException If the picture is not found.
+     */
+    String moveUserPictureIfNeeded(User user, String id) throws UserPictureNotFoundException
+    {
+        String temporalPicture = getTemporatyPictureName(id);
+        String finalPicture = getPictureName(id);
+
+        String sourcePicture = user.getPicture();
+        String targetPicture = sourcePicture.contains(temporalPicture) ? temporalPicture
+                : sourcePicture.contains(finalPicture) ? finalPicture
+                : sourcePicture;
+
+        if (storageService.exists(targetPicture))
+        {
+            if (sourcePicture.contains(temporalPicture))
+            {
+                return storageService.rename(temporalPicture, finalPicture);
+            } else
+            {
+                return user.getPicture();
+            }
         } else
         {
-            return ResponseEntity.notFound().build();
+            throw new UserPictureNotFoundException(targetPicture);
         }
     }
 
     // -------------------------------------------------------------------------
     @Operation(
-            summary = "Creates or updates User Info Google Datastore and Google Storage",
+            summary = "Creates or updates User Info in the Google Cloud Datastore and in the Google Cloud Storage.",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @CacheEvict(value = CachingConfig.CACHE_USER_PUBLIC_INFO, allEntries = true)
     @PutMapping("users/{id}")
     @PreAuthorize("@securityService.isAuthorized(#id)")
+    @Transactional
     public ResponseEntity<?> putUser(
             @PathVariable String id,
             @Valid @RequestBody User user)
-            throws IOException
     {
-        String temporalPicture = getTemporatyPictureName(id);
-
-        // moves temporary picture to permanent picture ------------------------
-        if (user.getMediaLink().contains(temporalPicture)
-                && storageService.exists(temporalPicture));
-        {
-            String mediaLink = storageService
-                    .rename(temporalPicture, getPictureName(id));
-            user.setMediaLink(mediaLink);
-        }
+        User newUser;
+        HttpStatusCode status = HttpStatus.CREATED;
 
         // checks that the path id correspont to user email --------------------
-        // and there is a media link
         String pathEmail = User.getEmailFromId(id);
-        if ((user.getMediaLink() != null) && (pathEmail.equals(user.getEmail())))
+        if (!pathEmail.equals(user.getEmail()))
         {
-            user.setId(id);
-            userRepository.save(user);
-            return (ResponseEntity.status(HttpStatus.CREATED).body(user));
+            throw new UserIdException();
         }
-        return (ResponseEntity.badRequest().build());
+
+        // Is there a user with this id ---------------------------------------.
+        Optional<User> newUserOptional = userRepository.findById(id);
+        newUser = newUserOptional.orElseGet(() ->
+        {
+            User aux = new User();
+            aux.setCreatedDate(
+                    ZonedDateTime.now(ZoneId.of("Europe/Madrid")).toInstant());
+            return aux;
+        });
+
+        if (newUserOptional.isPresent())
+        {
+            status = HttpStatus.ACCEPTED;
+            newUser.setVersion(newUser.getVersion() + 1);
+        }
+
+        // moves temporary picture to permanent picture ------------------------
+        newUser.setPicture(moveUserPictureIfNeeded(user, id));
+        //
+        newUser.setId(id);
+        newUser.setEmail(user.getEmail());
+        newUser.setName(user.getName());
+        newUser.setDescription(user.getDescription());
+        newUser.setWeb(user.getWeb());
+
+        userRepository.save(newUser);
+        return (ResponseEntity.status(status).body(newUser));
+
     }
 
     // -------------------------------------------------------------------------
     @Operation(
-            summary = "Deletes User Info from Datastore and Google Storage",
+            summary = "Deletes User Info from the Google Cloud Datastore and its picture from the Google Cloud Storage.",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @CacheEvict(value = CachingConfig.CACHE_USER_PUBLIC_INFO, allEntries = true)
@@ -161,32 +218,37 @@ public class UserController
     @PreAuthorize("@securityService.isAuthorized(#id)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable String id)
-            throws IOException
     {
         userRepository.deleteById(id);
         storageService.delete(getPictureName(id));
     }
-        
+
     // -------------------------------------------------------------------------
+    @Tag(name = "User Picture in the Google Cloud Storage")
     @Operation(
-            summary = "Gets User Picture Media Link from Google Cloud Storage",
+            summary = "Gets Picture Media Link of the User Id from the Google Cloud Storage.",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
     @GetMapping(path = "users/{id}/picture")
     @PreAuthorize("@securityService.isAuthorized(#id)")
-    public ResponseEntity<?> getUserPictureFromGoogleCloudStorage(
+    public ResponseEntity<UserPicture> getUserPictureFromGoogleCloudStorage(
             @Parameter(description = "Id of the user") @PathVariable String id)
     {
         String mediaLink = storageService.getMediaLink(getPictureName(id));
-        return ResponseEntity.ok().body(
-                Collections.singletonMap("mediaLink", mediaLink));
+        return ResponseEntity.ok().body(UserPicture.of(mediaLink));
     }
 
     // -------------------------------------------------------------------------
+    @Tag(name = "User Picture in the Google Cloud Storage")
     @Operation(
             summary = "Saves a temporary picture that is used for creating or updating the User with a PUT {id}.",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
+    @ApiResponses(
+            {
+                @ApiResponse(responseCode = "200", description = "Successful operation"),
+                @ApiResponse(responseCode = "500", description = "Google Cloud Storage Problem")
+            })
     @PostMapping(
             path = "users/{id}/picture",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -195,7 +257,7 @@ public class UserController
     @PreAuthorize("@securityService.isAuthorized(#id)")
     public ResponseEntity<?> saveTemporaryFileInGoogleCloudStorage(
             @Parameter(description = "Id of the user") @PathVariable String id,
-            @Parameter(description = "Picture of the user") @RequestPart("file-data") MultipartFile file)
+            @Parameter(description = "Temporaty picture of the user") @RequestPart("file-data") MultipartFile file)
             throws IOException
     {
         String fileName;
@@ -206,19 +268,13 @@ public class UserController
         try (InputStream is = file.getInputStream())
         {
             mediaLink = storageService.save(fileName, is);
-
-        } catch (IOException ex)
-        {
-            return (ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR).
-                    body(ex.getMessage()));
         }
 
-        return (ResponseEntity.ok().body(
-                Collections.singletonMap("mediaLink", mediaLink)));
+        return (ResponseEntity.ok().body(UserPicture.of(mediaLink)));
     }
 
     // -------------------------------------------------------------------------
+    @Tag(name = "User Picture in the Google Cloud Storage")
     @Operation(
             summary = "Deletes the temporary picture of the User Id.",
             security = @SecurityRequirement(name = "Bearer Authentication")
