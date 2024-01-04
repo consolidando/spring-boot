@@ -59,7 +59,7 @@ public class StorageService
             BlobInfo blobInfo = BlobInfo.newBuilder(getBlobId(fileName))
                     //.setAcl(publicAccess)
                     //                .setContentType("image/jpg")
-                    //                .setCacheControl("no-cache")
+                    //.setCacheControl("max-age=604800")
                     .build();
 
             Blob blob = storage.createFrom(blobInfo, file);
@@ -75,24 +75,29 @@ public class StorageService
         return (mediaLink);
     }
 
-    public String rename(String sourceFileName, String targetFileName)
+    public String rename(String sourceFileName, String targetFileName, String cacheControl)
     {
         String mediaLink = null;
         try
         {
             BlobId source = getBlobId(sourceFileName);
             BlobId target = getBlobId(targetFileName);
-
+            
+            BlobInfo targetBlobInfo = BlobInfo.newBuilder(target)                    
+                    .setCacheControl(cacheControl)  
+                    .build();
+            
             CopyWriter copyWriter
                     = storage.copy(
                             Storage.CopyRequest.newBuilder()
                                     .setSource(source)
-                                    .setTarget(target,
-                                            Storage.BlobTargetOption.predefinedAcl(
-                                                    Storage.PredefinedAcl.PUBLIC_READ)
+                                    .setTarget(targetBlobInfo,                                             
+                                            Storage.BlobTargetOption
+                                                    .predefinedAcl(Storage.PredefinedAcl.PUBLIC_READ)
                                     ).build());
 
             storage.get(source).delete();
+
             mediaLink = copyWriter.getResult().getMediaLink();
 
         } catch (StorageException e)
@@ -106,15 +111,15 @@ public class StorageService
     public String getMediaLink(String fileName)
     {
         String mediaLink = null;
-        
+
         BlobId blobId = getBlobId(fileName);
         Blob blob = storage.get(blobId);
-        
+
         if (blob != null)
         {
             mediaLink = blob.getMediaLink();
         }
-                
+
         return (mediaLink);
     }
 

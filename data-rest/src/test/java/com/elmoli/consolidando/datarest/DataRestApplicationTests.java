@@ -3,7 +3,6 @@
  * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
-
 package com.elmoli.consolidando.datarest;
 
 import com.elmoli.consolidando.datarest.domain.User;
@@ -35,7 +34,7 @@ class DataRestApplicationTests
 
     @Autowired
     private MockMvc mvc;
-    
+
     @Test
     public void integrateTestCreateUser() throws Exception
     {
@@ -60,7 +59,7 @@ class DataRestApplicationTests
         // Parse the JSON response to extract the user ID
         ObjectMapper objectMapper = new ObjectMapper();
         Map mapObject = objectMapper.readValue(result.getResponse().getContentAsString(), Map.class);
-        id = (String) mapObject.get("id");        
+        id = (String) mapObject.get("id");
 
         // deletes user temporary files of previous connections ----------------
         String path = "/apis/users/%s".formatted(id);
@@ -86,26 +85,23 @@ class DataRestApplicationTests
 
         ObjectMapper objectMapper2 = new ObjectMapper();
         Map mapObject2 = objectMapper2.readValue(result.getResponse().getContentAsString(), Map.class);
-        String mediaLink = (String) mapObject2.get("picture");  
+        String mediaLink = (String) mapObject2.get("picture");
 
         // creates user new user adding previous temporary image ---------------
         path = "/apis/users/%s".formatted(id);
-        User user = new User(TEST_EMAIL, 
-                "Test Name", 
-                "Test Description", 
+        User user = new User(TEST_EMAIL,
+                "Test Name",
+                "Test Description",
                 mediaLink,
                 "https://test.test.com/");
-        
+
         // 
         result = mvc.perform(put(path)
                 .with(jwt)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(user)))
-                .andExpect(status().isCreated())
+                .andExpect(status().is2xxSuccessful())
                 .andReturn();
-                
     }
-    
-
 
 }

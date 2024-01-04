@@ -11,8 +11,7 @@ function indexStartUp()
     usersWarmupRequest();
     usersLoadGoogleIdentityAndRenderSignInButton("signInButton")
             .then(() =>
-            {
-                document.getElementById("notauthenticatedyet").style.display = "none";
+            {                 
                 document.getElementById("token").textContent = usersGetToken();
                 document.getElementById("owner").textContent = usersGetName();
                 document.getElementById("email").textContent = usersGetEmail();

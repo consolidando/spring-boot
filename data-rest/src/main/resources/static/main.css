@@ -4,24 +4,24 @@
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
 
-:root 
+:root
 {
     font-size: 18px;
     margin: 0em 1em;
     color: darkblue;
-}    
-
-body 
-{
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
-footer 
+body
 {
-  margin-top: auto;
-  margin-bottom: 2em;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+footer
+{
+    margin-top: auto;
+    margin-bottom: 2em;
 }
 
 footer a
@@ -29,10 +29,30 @@ footer a
     text-decoration: none;
 }
 
+.buttons
+{
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    padding: 0 10px;
+    height: 32px;
+    line-height: 32px;    
+    font-family: "Google Sans",arial,sans-serif;
+    box-sizing: border-box;
+    font-size: 14px;
+    letter-spacing: 0.25px;
+    color: #3c4043;
+}
+
+a.buttons
+{
+    text-decoration: none;
+}
+
 .block
 {
     background-color: lightgray;
-    margin: 1em 0em;;
+    margin: 1em 0em;
+    ;
     padding: 1em;
     border-radius: 10px;
 }

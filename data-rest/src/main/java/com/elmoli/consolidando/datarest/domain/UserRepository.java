@@ -1,8 +1,11 @@
+
 /*
- * Copyright (c) 2023 joanribalta@elmolidelanoguera.com
+ * Copyright (c) 2024 joanribalta@elmolidelanoguera.com
  * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
+
+
 package com.elmoli.consolidando.datarest.domain;
 
 import com.elmoli.consolidando.datarest.config.CacheControl;
@@ -29,7 +32,7 @@ public interface UserRepository extends DatastoreRepository<User, String>
 {
 
     @Operation(
-            summary = "this annotation does not work..."
+            summary = "I do not know how to set up Swagger annotations for this method!!!"
     )
     @CacheControl(maxAge = 30, timeUnit = TimeUnit.DAYS)
     @Cacheable(CACHE_USER_PUBLIC_INFO)

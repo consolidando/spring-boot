@@ -36,7 +36,7 @@ public class User
     private String id;
 
     @Email(message = "Email should be valid.")
-    @NotBlank(message = "email must be defined.")
+    @NotBlank(message = "Email must be defined.")
     private String email;
 
     @Size(min = 5, max = 25, message = "Publisher name must be between 5 and 25 characters.")

@@ -46,16 +46,13 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @EnableMethodSecurity
 public class SecurityConfig
 {
-
     @Value("${data-rest.admin.emails}")
     public String adminEmailsList;
 
     static public String ROLE_PREFIX = "ROLE_";
     static public String USER_ROLE = "USER";
     static public String ADMIN_ROLE = "ADMIN";
-
-    
-        
+            
     private HandlerExceptionResolver exceptionResolver;
 
     public SecurityConfig(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptionResolver)

@@ -10,35 +10,18 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width" />
         <base href="/" />
-        <link rel="stylesheet" type="text/css" href="main.css?v=12" />
-        <script src="users.js?v=12"></script>
-        <script src="index.js?v=12"></script>
+        <link rel="stylesheet" type="text/css" href="main.css?v=13" />
+        <script src="users.js?v=13"></script>
+        <script src="index.js?v=13"></script>
     </head>
     <body>
         <main>
             <h1>Spring Data Rest</h1>
 
-            <div style="display: flex; flex-direction: column;">
-                <a href="/swagger-ui.html">Swagger UI</a>  
-                <a href="/apis-docs">APIs Docs</a> 
-                <a href="/apis">APIs</a>
-            </div>
-
-
-            <p>This is a demonstration of how to use a Google ID Token to authorize
-                access to a resource on a server.</p>
-
-            <h2>Technologies</h2>
-            <ul>
-                <li><strong>Spring Boot</strong></li>
-                <li><strong>Google Sign In</strong></li>
-                <li><strong>Google Storage</strong></li>
-                <li><strong>Google Datastore</strong></li>
-            </ul>
-
-
-            <h2>Authentication with Google Identity - Sign In</h2>
-            <div id="notauthenticatedyet">
+            <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                <a class="buttons" href="/swagger-ui.html">Swagger UI</a>  
+                <a class="buttons" href="/apis-docs">APIs Docs</a> 
+                <a class="buttons" href="/apis">APIs</a>
                 <span id="signInButton"></span>
             </div>
             <div id="authenticated" style="display: none;">
@@ -57,8 +40,7 @@
 
                 <h2>Authorization of a Resource in Spring Server</h2>
 
-                <p>This ID Token allows us to access a <strong>resource user</strong> on a Spring server, which returns the <strong>Principal</strong>
-                    once the server has verified the token's signature against the Google authorization server.</p>
+                <p>This ID Token allows us to access a <strong>resource USERS</strong> on a Spring server</p>
 
                 <h2>Get Users</h2>
                 <div style="display: flex; flex-direction: row;">

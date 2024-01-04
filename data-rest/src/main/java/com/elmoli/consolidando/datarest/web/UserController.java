@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -58,6 +59,7 @@ public class UserController
 
     private final String USER_TEMPORARY_PICTURE = "%s/temporary";
     private final String USER_PICTURE = "%s/logo";
+    private final String CACHE_CONTROL_PICTURE = "public, max-age=2592000";
 
     private final UserRepository userRepository;
     private final StorageService storageService;
@@ -135,7 +137,7 @@ public class UserController
         String temporalPicture = getTemporatyPictureName(id);
         String finalPicture = getPictureName(id);
 
-        String sourcePicture = user.getPicture();
+        String sourcePicture = URLDecoder.decode(user.getPicture());
         String targetPicture = sourcePicture.contains(temporalPicture) ? temporalPicture
                 : sourcePicture.contains(finalPicture) ? finalPicture
                 : sourcePicture;
@@ -144,7 +146,8 @@ public class UserController
         {
             if (sourcePicture.contains(temporalPicture))
             {
-                return storageService.rename(temporalPicture, finalPicture);
+                return storageService.rename(temporalPicture,
+                        finalPicture, CACHE_CONTROL_PICTURE);
             } else
             {
                 return user.getPicture();
