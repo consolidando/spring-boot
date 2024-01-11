@@ -11,12 +11,12 @@
         <meta name="viewport" content="width=device-width" />
         <base href="/" />
         <link rel="stylesheet" type="text/css" href="main.css?v=13" />
-        <script src="users.js?v=13"></script>
-        <script src="index.js?v=13"></script>
+        <script src="users.js?v=14"></script>
+        <script src="index.js?v=14"></script>
     </head>
     <body>
         <main>
-            <h1>Spring Data Rest</h1>
+            <h1>Spring Data Rest Users Resource Test App</h1>
 
             <div style="display: flex; flex-wrap: wrap; gap: 10px">
                 <a class="buttons" href="/swagger-ui.html">Swagger UI</a>  
@@ -38,11 +38,9 @@
                     </p>
                 </div>
 
-                <h2>Authorization of a Resource in Spring Server</h2>
+                <h2>Testing users resource</h2>
 
-                <p>This ID Token allows us to access a <strong>resource USERS</strong> on a Spring server</p>
-
-                <h2>Get Users</h2>
+                <h2>Get Users (Without token ID)</h2>
                 <div style="display: flex; flex-direction: row;">
                     <button id="getusers" disabled>Get Users</button>                   
                 </div>
@@ -53,7 +51,8 @@
                 </div>
 
                 <br>
-                <h2>Create Users</h2>
+                <h2>Create User (With token ID)</h2>
+                <p>(This returns an error because the picture does no exist in the Google Cloud Storage.</p>
                 <div style="display: flex; flex-direction: row;">
                     <button id="createuser" disabled>Create User</button>                   
                 </div>
@@ -62,6 +61,10 @@
                     <h3 >Result</h3>
                     <div id="createuserresult" class="block"></div>
                 </div>
+                
+                <br>
+                <h2>You can use Swagger UI for other testes</h2>                
+                <div><a class="buttons" href="/swagger-ui.html">Swagger UI</a>  </div>
 
             </div>
         </main>

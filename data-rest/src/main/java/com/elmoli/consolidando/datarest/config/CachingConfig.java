@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 joanribalta@elmolidelanoguera.com
+ * Copyright (c) 2024 joanribalta@elmolidelanoguera.com
  * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 public class CachingConfig
 {
     public final static String CACHE_USER_PUBLIC_INFO = "userPublicInfo";
+    public final static String CACHE_GOOGLE_PUBLIC_KEYS = "googlePublicKeys";
     
     @Bean
     public CacheManager cacheManager()

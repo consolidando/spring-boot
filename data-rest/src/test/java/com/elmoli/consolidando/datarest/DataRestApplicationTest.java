@@ -1,11 +1,14 @@
 /*
- * Copyright (c) 2023 joanribalta@elmolidelanoguera.com
+ * Copyright (c) 2023-2024 joanribalta@elmolidelanoguera.com
  * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
 package com.elmoli.consolidando.datarest;
 
+import com.elmoli.consolidando.datarest.config.CachingConfig;
 import com.elmoli.consolidando.datarest.domain.User;
+import com.elmoli.consolidando.datarest.domain.UserId;
+import com.elmoli.consolidando.datarest.domain.UserPicture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +16,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,16 +36,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class DataRestApplicationTests
+class DataRestApplicationTest
 {
 
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    CacheManager cacheManager;
+
     @Test
     public void integrateTestCreateUser() throws Exception
     {
-        String id;
         MvcResult result;
         String TEST_EMAIL = "test@test.com";
 
@@ -57,13 +69,13 @@ class DataRestApplicationTests
                 .andReturn();
 
         // Parse the JSON response to extract the user ID
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map mapObject = objectMapper.readValue(result.getResponse().getContentAsString(), Map.class);
-        id = (String) mapObject.get("id");
+        UserId userId = objectMapper.readValue(result.getResponse().getContentAsString(), UserId.class);
 
         // deletes user temporary files of previous connections ----------------
-        String path = "/apis/users/%s".formatted(id);
-        mvc.perform(delete(path));
+        String pathId = "/apis/users/%s".formatted(userId.id());
+        mvc.perform(delete(pathId).
+                with(jwt)).
+                andExpect(status().is2xxSuccessful());
 
         // upload user profile image to a temporary file -----------------------
         MockMultipartFile image = new MockMultipartFile(
@@ -72,10 +84,8 @@ class DataRestApplicationTests
                 MediaType.MULTIPART_FORM_DATA_VALUE,
                 new ClassPathResource("consolidando_2.jpg").getInputStream());
 
-        path = "/apis/users/%s/picture".formatted(id);
-
         result = mvc.perform(
-                MockMvcRequestBuilders.multipart(path)
+                MockMvcRequestBuilders.multipart(pathId+"/picture")
                         .file(image)
                         .with(jwt)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -83,25 +93,68 @@ class DataRestApplicationTests
                 .andExpect(status().isOk())
                 .andReturn();
 
-        ObjectMapper objectMapper2 = new ObjectMapper();
-        Map mapObject2 = objectMapper2.readValue(result.getResponse().getContentAsString(), Map.class);
-        String mediaLink = (String) mapObject2.get("picture");
+        UserPicture userPicture = objectMapper.readValue(result.getResponse().getContentAsString(), UserPicture.class);
 
-        // creates user new user adding previous temporary image ---------------
-        path = "/apis/users/%s".formatted(id);
+        // creates a new user adding previous temporary image ------------------
         User user = new User(TEST_EMAIL,
                 "Test Name",
                 "Test Description",
-                mediaLink,
+                userPicture.picture(),
                 "https://test.test.com/");
 
         // 
-        result = mvc.perform(put(path)
+        result = mvc.perform(put(pathId)
                 .with(jwt)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(user)))
+                .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
+
+        // get users collection ------------------------------------------------
+        result = mvc.perform(get("/apis/users")
+                .with(jwt))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // looks for the User in the cache --------------------------------------
+        Cache cache = cacheManager.getCache(CachingConfig.CACHE_USER_PUBLIC_INFO);
+        boolean cacheContainsId = lookForIdInTheCache(cache, userId.id());
+
+        assert (cacheContainsId);
+
+        // deletes user temporary files of previous connections ----------------
+        mvc.perform(delete(pathId).
+                with(jwt)).
+                andExpect(status().is2xxSuccessful());
+
+        // checks that the cache has been flushed -------------------------------
+        cache = cacheManager.getCache(CachingConfig.CACHE_USER_PUBLIC_INFO);
+        cacheContainsId = lookForIdInTheCache(cache, userId.id());
+
+        assert (cacheContainsId == false);
+    }
+
+    private boolean lookForIdInTheCache(Cache cache, String id)
+    {
+        if (cache instanceof ConcurrentMapCache concurrentMapCache)
+        {
+            Map<Object, Object> nativeCache = concurrentMapCache.getNativeCache();
+
+            for (Object cachedValue : nativeCache.values())
+            {
+                PageImpl<User> pageImpl = (PageImpl) cachedValue;
+                List<User> aux = pageImpl.getContent();
+                for (User user : aux)
+                {
+                    if (user.getId().equals(id))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
 }

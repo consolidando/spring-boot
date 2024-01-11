@@ -1,22 +1,19 @@
 /*
- * Copyright (c) 2023 joanribalta@elmolidelanoguera.com
+ * Copyright (c) 2024 joanribalta@elmolidelanoguera.com
  * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
 package com.elmoli.consolidando.datarest.config;
 
-import jakarta.servlet.ServletException;
+import static com.elmoli.consolidando.datarest.config.CachingConfig.CACHE_GOOGLE_PUBLIC_KEYS;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -29,6 +26,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
@@ -46,16 +45,22 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @EnableMethodSecurity
 public class SecurityConfig
 {
+               
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")   
+    String jwkSetUri;            
+    
     @Value("${data-rest.admin.emails}")
     public String adminEmailsList;
 
     static public String ROLE_PREFIX = "ROLE_";
     static public String USER_ROLE = "USER";
     static public String ADMIN_ROLE = "ADMIN";
-            
-    private HandlerExceptionResolver exceptionResolver;
 
-    public SecurityConfig(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptionResolver)
+    private HandlerExceptionResolver exceptionResolver;
+    private CacheManager cacheManager;
+
+    public SecurityConfig(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptionResolver,
+            CacheManager cacheManager)
     {
         this.exceptionResolver = exceptionResolver;
     }
@@ -114,6 +119,14 @@ public class SecurityConfig
         return converter;
     }
 
+    @Bean
+    JwtDecoder jwtDecoder(CacheManager cacheManager)
+    {
+        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri)
+                .cache(cacheManager.getCache(CACHE_GOOGLE_PUBLIC_KEYS))
+                .build();                
+    }
+
     public AuthenticationEntryPoint authenticationEntryPoint()
     {
         return (HttpServletRequest request,
@@ -134,10 +147,10 @@ public class SecurityConfig
     {
         return (request, response, accessDeniedException) ->
         {
-            BearerTokenAccessDeniedHandler defaultVersion =
-			new BearerTokenAccessDeniedHandler();
+            BearerTokenAccessDeniedHandler defaultVersion
+                    = new BearerTokenAccessDeniedHandler();
             defaultVersion.handle(request, response, accessDeniedException);
-            
+
             exceptionResolver.resolveException(request,
                     response,
                     null,

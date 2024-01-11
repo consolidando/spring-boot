@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 joanribalta@elmolidelanoguera.com
+ * Copyright (c) 2023-2024 joanribalta@elmolidelanoguera.com
  * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
@@ -78,7 +78,7 @@ function _usersGetTokenAndPayload(response)
     _usersToken = response.credential;
     //
     const base64Payload = response.credential.split('.')[1];
-    _usersDecodeTokenPayload = JSON.parse( 
+    _usersDecodeTokenPayload = JSON.parse(
             decodeURIComponent(escape(atob(base64Payload))));
 
     // 
@@ -117,7 +117,13 @@ function usersGetId(email) {
                 {
                     if (!response.ok)
                     {
-                        throw {status: response.status, statusText: response.statusText};
+                        return response.json().then(errorBody =>
+                        {
+                            throw {
+                                status: response.status,
+                                statusText: response.statusText,
+                                body: errorBody};
+                        });
                     }
                     return response.json();
                 })
@@ -135,14 +141,20 @@ function usersGet() {
                     headers:
                             {
                                 'Content-Type': 'application/json',
-    //                            Authorization: `Bearer ${_usersToken}`
+                                //                            Authorization: `Bearer ${_usersToken}`
                             }
                 })
                 .then(response =>
                 {
                     if (!response.ok)
                     {
-                        throw {status: response.status, statusText: response.statusText};
+                        return response.json().then(errorBody =>
+                        {
+                            throw {
+                                status: response.status,
+                                statusText: response.statusText,
+                                body: errorBody};
+                        });
                     }
                     return response.json();
                 })
@@ -158,8 +170,8 @@ function usersCreate(id, user)
         fetch(_USERS_RESOURCE + "/" + id,
                 {
                     method: 'PUT',
-                    headers: {                        
-                        'Content-Type': 'application/json',                        
+                    headers: {
+                        'Content-Type': 'application/json',
                         Authorization: `Bearer ${_usersToken}`
                     },
                     body: JSON.stringify(user)
@@ -168,7 +180,13 @@ function usersCreate(id, user)
                 {
                     if (!response.ok)
                     {
-                        throw {status: response.status, statusText: response.statusText};
+                        return response.json().then(errorBody =>
+                        {
+                            throw {
+                                status: response.status,
+                                statusText: response.statusText,
+                                body: errorBody};
+                        });
                     }
 
                     return response.json();
@@ -180,13 +198,7 @@ function usersCreate(id, user)
 
 function usersWarmupRequest()
 {
-     fetch("/warmup", {
-//        mode: 'no-cors',
-        headers: {
-//            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-//            'Sec-Fetch-Mode': "navigate"
-        }
-    });
+    fetch("/warmup");
 }
 
 function usersGenerateHTMLFromObject(obj, indent = 0)
