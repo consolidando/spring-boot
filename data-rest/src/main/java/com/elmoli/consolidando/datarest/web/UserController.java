@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 joanribalta@elmolidelanoguera.com
+ * Copyright (c) 2023-2024 joanribalta@elmolidelanoguera.com
  * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
@@ -258,7 +258,7 @@ public class UserController
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("@securityService.isAuthorized(#id)")
-    public ResponseEntity<?> saveTemporaryFileInGoogleCloudStorage(
+    public ResponseEntity<?> saveTemporaryPictureInGoogleCloudStorage(
             @Parameter(description = "Id of the user") @PathVariable String id,
             @Parameter(description = "Temporaty picture of the user") @RequestPart("file-data") MultipartFile file)
             throws IOException
@@ -285,7 +285,7 @@ public class UserController
     @DeleteMapping("users/{id}/picture")
     @PreAuthorize("@securityService.isAuthorized(#id)")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTemporaryFileFromGoogleClousStorage(
+    public void deleteTemporaryPictureFromGoogleClousStorage(
             @Parameter(description = "Id of the user") @PathVariable String id)
     {
         String fileName;

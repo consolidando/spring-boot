@@ -79,7 +79,7 @@ public class SecurityConfig
                 .authorizeHttpRequests((request)
                         -> request
                         .requestMatchers("apis/users").permitAll()
-                        .requestMatchers("apis/users/*").authenticated()
+                        .requestMatchers("apis/users/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .exceptionHandling(exception
