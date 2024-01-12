@@ -1,5 +1,6 @@
 # Spring Boot REST + Google Sign In + Google Datastore
 
+### Overview
 We will allow a user previously authenticated using the Google Identity authorization server to register in our application by entering the relevant information that includes an image. Some user information will be publicly accessible.
 
 The application is developed in Java using Spring Boot with Jetty as the server. We use Spring Data REST to create the API, Google Cloud Storage to store the images, and Google Datastore to store user information. Additionally, we document our API with springdoc-openapi and use Swagger UI as the interface to interact with the API. We also talk about how we have standardized API error reporting following the RFC 7807 standard. And we also provide details on how we have implemented the caching system to act on the server and in the browser.
