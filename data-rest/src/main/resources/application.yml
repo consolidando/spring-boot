@@ -33,7 +33,7 @@ spring:
     gcp:
       datastore:
         namespace: spring-demo
-    project-id: emp-2022
+    project-id: @app.deploy.projectId@
 #    logging:
 #      enabled: true
   data:

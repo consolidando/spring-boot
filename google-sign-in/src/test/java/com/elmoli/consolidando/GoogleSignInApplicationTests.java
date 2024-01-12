@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2023 joanribalta@elmolidelanoguera.com
+ * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+ * Blog Consolidando: https://diy.elmolidelanoguera.com/
+ */
+
+
 package com.elmoli.consolidando;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +20,10 @@ class GoogleSignInApplicationTests
     private @Autowired
     WebTestClient webTestClient;
 
-    final String invalidTokenString = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+    final String invalidTokenString = 
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwib"+
+            "mFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fw"+
+            "pMeJf36POk6yJV_adQssw5c";
 
     @Test
     public void testInvalidIDToken()
