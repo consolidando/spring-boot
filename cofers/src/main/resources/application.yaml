@@ -1,3 +1,6 @@
+app:
+  rick-and-Morty-api-url: https://rickandmortyapi.com
+      
 spring:
   datasource:
     url: jdbc:h2:mem:testdb
@@ -9,7 +12,17 @@ spring:
   h2:
     console:
       enabled: true
-      path: /h2-console
+      path: /h2-console      
+  data:
+    rest:
+      base-path: /apis
+      
+springdoc:
+  api-docs:
+    path: /apis-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true          
 
 logging:
   level:

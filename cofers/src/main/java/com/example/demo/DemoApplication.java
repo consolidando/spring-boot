@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.scheduler.Schedulers;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner
@@ -33,47 +34,63 @@ public class DemoApplication implements CommandLineRunner
         SpringApplication.run(DemoApplication.class, args);
     }
 
+    /**
+     * Executes the application logic: - Retrieves the total number of episodes
+     * from the Rick and Morty API. - Selects a random episode. - Fetches
+     * information about characters in the selected episode. - Saves character
+     * information in the repository and logs their names.
+     *
+     * Note: This method is part of the application's initialization process.
+     *
+     * @param args Command-line arguments.
+     * @throws Exception If an error occurs during the execution.
+     */
     @Override
     public void run(String... args) throws Exception
     {
         try
-        {                        
+        {
             Mono<Integer> numberOfEpisodesMono = episodeApiClient.getNumberOfEpisodes();
             int numberOfEpisodes = numberOfEpisodesMono.block();
 
-            System.out.println("Number of episodes: " + numberOfEpisodes);
+            logger.info("Number of episodes: {}", numberOfEpisodes);
 
             Random random = new Random();
             int episodeId = random.nextInt(numberOfEpisodes) + 1;
 
-            System.out.println("Episode Number: " + episodeId);
+            logger.info("Episode Number: {}", episodeId);
 
             Mono<List<EpisodeInfoData.Character>> episodeInfoMono = episodeApiClient.getEpisodeInfo(episodeId);
             List<EpisodeInfoData.Character> episodeInfoData = episodeInfoMono.block();
-                        
+
             if (episodeInfoData != null)
             {
                 Flux<EpisodeInfoData.Character> charactersFlux = Flux.fromIterable(episodeInfoData);
 
-                Flux<CharacterInfo> characterInfoFlux = charactersFlux
-                        .flatMap(character -> episodeApiClient.getCharacterInfo(character.id()));
-
-                characterInfoFlux.subscribe(characterInfo ->
+                List<CharacterInfo> savedCharacters = charactersFlux
+                        .parallel()
+                        .runOn(Schedulers.parallel())
+                        .flatMap(character -> episodeApiClient.getCharacterInfo(character.id()))
+                        .flatMap(characterInfo -> Mono.fromCallable(() ->
                 {
                     try
                     {
+                        logger.info("Character Name: {}", characterInfo.getName());
                         characterRepository.save(characterInfo);
+                        return characterInfo;
                     } catch (Exception e)
                     {
                         logger.error("Error saving in the repository: {}", e.getMessage());
+
+                        return null;
                     }
-
-                    logger.info("Character Name: {}", characterInfo.getName());
-
-                });
+                }).subscribeOn(Schedulers.parallel()))
+                        .sequential()
+                        .collectList()
+                        .block();
             }
-                        
-            logger.info("App has been intilised");
+            
+            logger.info("Database is ready");
 
         } catch (Exception e)
         {
