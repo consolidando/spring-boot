@@ -86,11 +86,7 @@ Spring Boot generates a fat JAR that contains everything the application needs t
  run. Once built, we can execute it on any environment with a JVM compatible 
 with Java 17. To run the application, use the command `java -jar demo-0.0.1-SNAPSHOT.jar` 
 in the console. Access the home page at http://localhost:8080/.
-
-
-## application.yaml
-
-# Application Configuration
+## Application Configuration
 
 Below is the configuration for the application, which includes information about the Rick and Morty API URL, H2 database, API documentation, and logging settings.
 
