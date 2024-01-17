@@ -1,4 +1,4 @@
-# Cofers Technical test for backend
+# Cofers technical test for backend
 
 ### Overview
 
