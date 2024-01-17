@@ -74,10 +74,10 @@ Additionally, the tests can obtain the `episodeId` from `DemoApplication` to und
 Upon application startup, a welcome page (`index.html`) is available with links 
 to various endpoints:
 
-- [http://localhost:8080//swagger-ui.html](#swagger-ui): Explore and interact with the API using Swagger documentation.
-- [http://localhost:8080//apis](#apis): Access the main API endpoint.
-- [http://localhost:8080//apis/characters](#apischaracters): Retrieve information about characters.
-- [http://localhost:8080//apis-docs](#apis-docs): Access additional API documentation.
+- [/swagger-ui.html](http://localhost:8080/swagger-ui): Explore and interact with the API using Swagger documentation.
+- [/apis](http://localhost:8080/apis): Access the main API endpoint.
+- [/apis/characters](http://localhost:8080/apischaracters): Retrieve information about characters.
+- [/apis-docs](http://localhost:8080/apis-docs): Access additional API documentation.
 
 ## Executable - fat Jar
 
