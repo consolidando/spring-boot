@@ -52,7 +52,7 @@ class ApiIntegrationTest
         //
         var appState = demoApplication.getDatabaseState();
         assertEquals(DemoApplication.DatabaseState.INITIALIZED, appState);
-        int episodeId = demoApplication.getEpisodeId();
+        int episodeId = demoApplication.getDatabaseCharactersEpisodeId();
         assertTrue(episodeId > 0);
 
         long count = characterRepository.count();

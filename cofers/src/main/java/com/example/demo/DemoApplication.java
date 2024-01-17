@@ -111,12 +111,22 @@ public class DemoApplication implements CommandLineRunner
 
     }
 
+    /**
+     * Get the current state of the database.
+     *
+     * @return The state of the database.
+     */
     public DatabaseState getDatabaseState()
     {
         return this.dataBaseState;
     }
-
-    public int getEpisodeId()
+    
+    /**
+     * Get the ID of the episode for characters in the database.
+     *
+     * @return The episode ID.
+     */
+    public int getDatabaseCharactersEpisodeId()
     {
         return this.episodeId;
     }
