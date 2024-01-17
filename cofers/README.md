@@ -78,10 +78,11 @@ to various endpoints:
 - [/apis](http://localhost:8080/apis): Access the main API endpoint.
 - [/apis/characters](http://localhost:8080//apis/characters): Retrieve information about characters.
 - [/apis-docs](http://localhost:8080/apis-docs): Access additional API documentation.
+- [/h2-console](http://localhost:8080/h2-console): H2 console, (user=sa, password=password).
 
 ## Executable - fat Jar
 
-
+## application.yaml
 
 ### Reference Documentation
 * [The Rick and Morty API - Documentation](https://rickandmortyapi.com/documentation)
