@@ -82,7 +82,49 @@ to various endpoints:
 
 ## Executable - fat Jar
 
+Spring Boot generates a fat JAR that contains everything the application needs to
+ run. Once built, we can execute it on any environment with a JVM compatible 
+with Java 17. To run the application, use the command `java -jar demo-0.0.1-SNAPSHOT.jar` 
+in the console. Access the home page at http://localhost:8080/.
+
+
 ## application.yaml
+
+# Application Configuration
+
+Below is the configuration for the application, which includes information about the Rick and Morty API URL, H2 database, API documentation, and logging settings.
+
+```yaml
+app:
+  rick-and-Morty-api-url: https://rickandmortyapi.com
+      
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect    
+  h2:
+    console:
+      enabled: true
+      path: /h2-console      
+  data:
+    rest:
+      base-path: /apis
+      
+springdoc:
+  api-docs:
+    path: /apis-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true          
+
+logging:
+  level:
+    com.example.demo: INFO
+
 
 ### Reference Documentation
 * [The Rick and Morty API - Documentation](https://rickandmortyapi.com/documentation)
