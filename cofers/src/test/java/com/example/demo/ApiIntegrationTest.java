@@ -28,8 +28,7 @@ class ApiIntegrationTest
     @Autowired
     private WebTestClient webTestClient;
 
-    @Test
-    void testDatabaseInitialization() throws Exception
+    private void waitForDatabaseInitialization() throws InterruptedException
     {
         int maxWaitSeconds = 10;
         int waitIntervalMillis = 1000;
@@ -42,7 +41,15 @@ class ApiIntegrationTest
             }
             Thread.sleep(waitIntervalMillis);
         }
+    }
 
+    @Test
+    void testDatabaseInitialization() throws Exception
+    {
+        //
+        waitForDatabaseInitialization();
+
+        //
         var appState = demoApplication.getDatabaseState();
         assertEquals(DemoApplication.DatabaseState.INITIALIZED, appState);
         int episodeId = demoApplication.getEpisodeId();

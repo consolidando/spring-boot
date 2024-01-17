@@ -17,7 +17,6 @@ import reactor.core.scheduler.Schedulers;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner
-
 {
 
     public enum DatabaseState
@@ -26,8 +25,8 @@ public class DemoApplication implements CommandLineRunner
         INITIALIZED
     }
 
-    int episodeId = 0;
-    DatabaseState dataBaseState = DatabaseState.NOT_INITIALIZED;
+    private int episodeId = 0;
+    private DatabaseState dataBaseState = DatabaseState.NOT_INITIALIZED;
 
     private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
 
