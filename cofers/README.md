@@ -124,7 +124,7 @@ springdoc:
 logging:
   level:
     com.example.demo: INFO
-
+```
 
 ### Reference Documentation
 * [The Rick and Morty API - Documentation](https://rickandmortyapi.com/documentation)
