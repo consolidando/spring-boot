@@ -124,3 +124,6 @@ logging:
 
 ### Reference Documentation
 * [The Rick and Morty API - Documentation](https://rickandmortyapi.com/documentation)
+* [Spring Data REST](https://spring.io/projects/spring-data-rest/)
+* [Swagger UI](https://swagger.io/tools/swagger-ui/)
+* [H2 database engine](https://www.h2database.com/html/main.html)
