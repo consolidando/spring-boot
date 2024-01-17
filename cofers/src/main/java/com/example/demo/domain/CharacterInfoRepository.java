@@ -9,12 +9,10 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 
 /**
- * Repository interface for managing {@link CharacterInfo} entities exposed as a Spring Data REST resource.
- * This repository provides customizations to control the exposure of CRUD operations for the "characters" collection.
- * Additionally, specific operations like save, delete, and findById for individual items are customized for hiding from the REST API.
- *
- * @RepositoryRestResource annotation is used to customize the resource path, collection resource relation, and specify an excerpt projection.
- * @RestResource(exported = false) is used on specific CRUD methods to disable their exposure in the API.
+ * Repository interface for managing {@link CharacterInfo} entities 
+ * exposed as a Spring Data REST resource.
+ * @RestResource(exported = false) is used on specific CRUD methods to disable 
+ * their exposure in the API.
  */
 
 @Tag(name="GET Character Info Projection Collection")

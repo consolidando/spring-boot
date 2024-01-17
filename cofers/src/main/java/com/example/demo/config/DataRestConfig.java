@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2023 joanribalta@elmolidelanoguera.com
- * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
- * Blog Consolidando: https://diy.elmolidelanoguera.com/
- */
 package com.example.demo.config;
 
 import com.example.demo.domain.CharacterInfo;

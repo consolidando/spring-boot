@@ -6,7 +6,6 @@ import com.example.demo.domain.CharacterInfoRepository;
 import com.example.demo.service.EpisodeApiClient;
 import java.util.List;
 import java.util.Random;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,13 +20,25 @@ public class DemoApplication implements CommandLineRunner
 
 {
 
+    public enum DatabaseState
+    {
+        NOT_INITIALIZED,
+        INITIALIZED
+    }
+
+    int episodeId = 0;
+    DatabaseState dataBaseState = DatabaseState.NOT_INITIALIZED;
+
     private static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
 
-    @Autowired
     private EpisodeApiClient episodeApiClient;
-
-    @Autowired
     private CharacterInfoRepository characterRepository;
+
+    DemoApplication(EpisodeApiClient episodeApiClient, CharacterInfoRepository characterRepository)
+    {
+        this.episodeApiClient = episodeApiClient;
+        this.characterRepository = characterRepository;
+    }
 
     public static void main(String[] args)
     {
@@ -56,7 +67,7 @@ public class DemoApplication implements CommandLineRunner
             logger.info("Number of episodes: {}", numberOfEpisodes);
 
             Random random = new Random();
-            int episodeId = random.nextInt(numberOfEpisodes) + 1;
+            episodeId = random.nextInt(numberOfEpisodes) + 1;
 
             logger.info("Episode Number: {}", episodeId);
 
@@ -89,7 +100,9 @@ public class DemoApplication implements CommandLineRunner
                         .collectList()
                         .block();
             }
-            
+
+            this.dataBaseState = DatabaseState.INITIALIZED;
+
             logger.info("Database is ready");
 
         } catch (Exception e)
@@ -97,6 +110,16 @@ public class DemoApplication implements CommandLineRunner
             logger.error("API Request Error: {}", e.getMessage());
         }
 
+    }
+
+    public DatabaseState getDatabaseState()
+    {
+        return this.dataBaseState;
+    }
+
+    public int getEpisodeId()
+    {
+        return this.episodeId;
     }
 
 }

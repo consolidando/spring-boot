@@ -13,6 +13,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * Represents character information retrieved from the Rick and Morty API,
+ * specifically designed to be saved in the repository using JPA.
+ */
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
