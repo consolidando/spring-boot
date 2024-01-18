@@ -104,9 +104,7 @@ spring:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
     username: sa
-    password: password
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect    
+    password: password   
   h2:
     console:
       enabled: true
