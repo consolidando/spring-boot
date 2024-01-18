@@ -62,6 +62,11 @@ The `dataBaseState` variable in `DemoApplication` represents the state of the da
 
 The `episodeId` variable holds the randomly selected episode number retrieved from the Rick and Morty API during the application's initialization process.
 
+## Choosing the Container for Spring Boot
+
+When using the default values, the startup outcomes demonstrate slightly superior 
+performance with Tomcat compared to Jetty in the context of Spring Boot. 
+Consequently, the decision has been made to employ Tomcat.
 
 ## Synchronization of Tests
 
