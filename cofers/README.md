@@ -9,7 +9,7 @@ parallel. Furthermore, the application exposes an endpoint `/apis/characters`
 that returns the list of stored characters in JSON format, displaying only 
 the 'name' and 'status' fields.
 
-## EpisodeApiClient Java class
+## EpisodeApiClient @Service
 The `EpisodeApiClient` Java class serves as a client for the 
 [Rick and Morty API](https://rickandmortyapi.com/). It is implemented as a 
 Spring service, making use of the Spring WebClient for efficient HTTP 
