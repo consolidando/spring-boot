@@ -127,3 +127,4 @@ logging:
 * [Spring Data REST](https://spring.io/projects/spring-data-rest/)
 * [Swagger UI](https://swagger.io/tools/swagger-ui/)
 * [H2 database engine](https://www.h2database.com/html/main.html)
+* [Project Reactor Schedulers](https://projectreactor.io/docs/core/release/api/reactor/core/scheduler/Schedulers.html)
