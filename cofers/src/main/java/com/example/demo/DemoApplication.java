@@ -45,10 +45,11 @@ public class DemoApplication implements CommandLineRunner
     }
 
     /**
-     * Executes the application logic: - Retrieves the total number of episodes
-     * from the Rick and Morty API. - Selects a random episode. - Fetches
-     * information about characters in the selected episode. - Saves character
-     * information in the repository and logs their names.
+     * Executes the application logic: 
+     * 1 - Retrieves the total number of episodes from the Rick and Morty API. 
+     * 2 - Selects a random episode. 
+     * 3 - Fetches information about characters in the selected episode. 
+     * 4 - Saves character information in the repository and logs their names.
      *
      * Note: This method is part of the application's initialization process.
      *
@@ -60,19 +61,24 @@ public class DemoApplication implements CommandLineRunner
     {
         try
         {
+            long startTime = System.currentTimeMillis();
+            
+            // 1
             Mono<Integer> numberOfEpisodesMono = episodeApiClient.getNumberOfEpisodes();
             int numberOfEpisodes = numberOfEpisodesMono.block();
 
             logger.info("Number of episodes: {}", numberOfEpisodes);
 
+            // 2
             Random random = new Random();
-            episodeId = random.nextInt(numberOfEpisodes) + 1;
+            episodeId = random.nextInt(numberOfEpisodes) + 1;            
 
             logger.info("Episode Number: {}", episodeId);
-
+                        
             Mono<List<EpisodeInfoData.Character>> episodeInfoMono = episodeApiClient.getEpisodeInfo(episodeId);
             List<EpisodeInfoData.Character> episodeInfoData = episodeInfoMono.block();
 
+            // 3
             if (episodeInfoData != null)
             {
                 Flux<EpisodeInfoData.Character> charactersFlux = Flux.fromIterable(episodeInfoData);
@@ -85,6 +91,7 @@ public class DemoApplication implements CommandLineRunner
                 {
                     try
                     {
+                        // 4 
                         logger.info("Character Name: {}", characterInfo.getName());
                         characterRepository.save(characterInfo);
                         return characterInfo;
@@ -102,11 +109,12 @@ public class DemoApplication implements CommandLineRunner
 
             this.dataBaseState = DatabaseState.INITIALIZED;
 
-            logger.info("Database is ready");
+            long endTime = System.currentTimeMillis();
+            logger.info("Database is ready in  {} milliseconds", endTime - startTime);
 
         } catch (Exception e)
         {
-            logger.error("API Request Error: {}", e.getMessage());
+            logger.error("API Request Error: {}", e);
         }
 
     }
