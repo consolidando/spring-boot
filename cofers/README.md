@@ -81,7 +81,7 @@ to various endpoints:
 
 - [/swagger-ui.html](http://localhost:8080/swagger-ui.html): Explore and interact with the API using Swagger documentation.
 - [/apis](http://localhost:8080/apis): Access the main API endpoint.
-- [/apis/characters](http://localhost:8080//apis/characters): Retrieve information about characters.
+- [/apis/characters](http://localhost:8080/apis/characters): Retrieve information about characters.
 - [/apis-docs](http://localhost:8080/apis-docs): Access additional API documentation.
 - [/h2-console](http://localhost:8080/h2-console): H2 console, (user=sa, password=password).
 
@@ -91,6 +91,7 @@ Spring Boot generates a fat JAR that contains everything the application needs t
  run. Once built, we can execute it on any environment with a JVM compatible 
 with Java 17. To run the application, use the command `java -jar demo-0.0.1-SNAPSHOT.jar` 
 in the console. Access the home page at http://localhost:8080/.
+
 ## Application Configuration
 
 Below is the configuration for the application, which includes information about the Rick and Morty API URL, H2 database, API documentation, and logging settings.
