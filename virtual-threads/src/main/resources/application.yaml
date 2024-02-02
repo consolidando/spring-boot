@@ -1,0 +1,20 @@
+app:
+  rick-and-Morty-api-url: https://rickandmortyapi.com
+      
+spring:
+  application:
+    name: Virtual Threads
+  profiles: 
+    active: @spring.profiles.active@
+
+
+
+
+logging:
+  level:     
+    root: OFF
+    org.postgresql: OFF
+    com.elmoli.consolidando.vt: INFO
+    org.springframework.data: OFF
+    org.springframework.data.r2dbc: OFF
+    org.springframework.web.reactive.function.client: OFF

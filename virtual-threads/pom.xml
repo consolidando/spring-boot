@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.2</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.elmoli.consolidando</groupId>
+    <artifactId>vt</artifactId>
+    <version>1</version>
+    <name>virtual-threads</name>
+    <description>Virtual Threads in Spring Boot Start up</description>                
+    <properties>
+        <java.version>21</java.version>        
+    </properties>
+    <profiles>        
+        <profile>
+            <id>servlet</id>                       
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>            
+                <spring.profiles.active>simple,servlet</spring.profiles.active>  
+                <activemavenprofile>servlet</activemavenprofile>                              
+            </properties>     
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                </dependency>  
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <scope>runtime</scope>
+                </dependency> 
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-jdbc</artifactId>
+                </dependency>     
+            </dependencies>                                
+        </profile>    
+        <profile>
+            <id>netty</id>
+            <properties>            
+                <spring.profiles.active>reactor,flux</spring.profiles.active>
+                <activemavenprofile>netty</activemavenprofile>                
+            </properties>
+            <dependencies> 
+                <dependency>
+                    <groupId>io.r2dbc</groupId>
+                    <artifactId>r2dbc-h2</artifactId>
+                </dependency>
+        
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+                </dependency>
+                
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-jdbc</artifactId>
+                    <scope>runtime</scope>
+                </dependency>
+                
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-jdbc</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+              
+            </dependencies> 
+        </profile> 
+    </profiles>
+    <dependencies>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>                    
+        </dependency>                 
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>                                                                        
+                
+    </dependencies>
+
+    <build>       
+        <finalName>${project.artifactId}-${activemavenprofile}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-image</goal>
+                        </goals>
+                        <configuration>
+                            <imageName>${project.artifactId}-${activemavenprofile}:${project.version}</imageName>
+                            <environment>
+                                <BP_JVM_VERSION>21.*</BP_JVM_VERSION>
+                            </environment>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
