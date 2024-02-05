@@ -1,6 +1,5 @@
 package com.elmoli.consolidando.vt;
 
-import com.elmoli.consolidando.vt.repository.CharacterFluxRepository;
 import com.elmoli.consolidando.vt.client.EpisodeCharactersData;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
@@ -22,7 +21,7 @@ public class DemoApplication implements CommandLineRunner
         TIMEOUT,
         ERROR
     }
-
+       
     private int episodeId = 0;
     private DatabaseState dataBaseState = DatabaseState.NOT_INITIALIZED;
 
@@ -32,7 +31,7 @@ public class DemoApplication implements CommandLineRunner
 
     DemoApplication(EpisodeService episodeApi)
     {
-        this.episodeApi = episodeApi;
+        this.episodeApi = episodeApi;       
     }
 
     public static void main(String[] args)
@@ -46,6 +45,7 @@ public class DemoApplication implements CommandLineRunner
 
         try
         {
+                                                
             logger.info("-- Running run in thread: {}", Thread.currentThread());
             long startTime = System.currentTimeMillis();
 
@@ -108,10 +108,10 @@ public class DemoApplication implements CommandLineRunner
     {
         return this.episodeId;
     }
-    
+
     public Repository getRepository()
     {
-        return(episodeApi.getRepository());
+        return (episodeApi.getRepository());
     }
 
 }

@@ -13,8 +13,11 @@ import org.springframework.data.repository.Repository;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import com.elmoli.consolidando.vt.service.EpisodeService;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@ActiveProfiles({"simple", "servlet", "test"})
+@ActiveProfiles({"reactor", "flux", "test"})
 class ApiIntegrationTest
 {
 

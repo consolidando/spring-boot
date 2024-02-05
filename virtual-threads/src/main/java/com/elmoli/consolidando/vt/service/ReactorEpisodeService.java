@@ -8,6 +8,7 @@ import com.elmoli.consolidando.vt.repository.CharacterFluxRepository;
 import com.elmoli.consolidando.vt.repository.CharacterRepository;
 import com.elmoli.consolidando.vt.client.EpisodeApiWebClient;
 import com.elmoli.consolidando.vt.client.EpisodeCharactersData;
+import com.elmoli.consolidando.vt.repository.CharacterFlux;
 import java.util.List;
 import java.util.Random;
 import org.slf4j.Logger;
@@ -75,10 +76,10 @@ public class ReactorEpisodeService implements EpisodeService
                     .fromCallable(() ->
                     {
                         // Log character info
-                        logger.info("-- {} | Character Name: {}", Thread.currentThread(), characterInfo.id());
-                        // Save to repository
-                        characterRepository.save(characterInfo);
-                        return characterInfo;
+                        logger.info("-- {} | Character Name: {}", Thread.currentThread(), characterInfo.getId());
+                        // Save to repository        
+                        //characterInfo.setId(0);
+                        return (characterRepository.save(characterInfo));
                     })
                     .subscribeOn(Schedulers.parallel())
                     .onErrorResume(e ->
@@ -89,12 +90,17 @@ public class ReactorEpisodeService implements EpisodeService
                     }))
                     .sequential()
                     .collectList()
+                    .flatMap(characterInfos ->
+                    {                                              
+                        return Mono.just(characterInfos); 
+                    })
                     .doFinally(signalType ->
                     {
                         logger.info("Reactive flow completed with signal: {}", signalType);
                     })
-                    .block();
-            
+                    .block()
+                    .forEach(Mono::block);
+ 
             return true;
         } catch (Exception e)
         {

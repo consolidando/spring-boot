@@ -5,6 +5,8 @@
 package com.elmoli.consolidando.vt.controller;
 
 import com.elmoli.consolidando.vt.repository.Character;
+import com.elmoli.consolidando.vt.repository.CharacterDto;
+import com.elmoli.consolidando.vt.repository.CharacterFlux;
 import com.elmoli.consolidando.vt.repository.CharacterFluxRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +21,7 @@ import reactor.core.publisher.Flux;
 @RestController
 @RequestMapping("apis/characters")
 public class CharacterFluxController {
-    private static final Logger logger = LoggerFactory.getLogger(CharacterController.class);
+    private static final Logger logger = LoggerFactory.getLogger(CharacterFluxController.class);
     private final CharacterFluxRepository characterRepository;
 
     public CharacterFluxController(CharacterFluxRepository characterRepository) {
@@ -27,9 +29,9 @@ public class CharacterFluxController {
     }
 
     @GetMapping
-    public Flux<Character> getAllCharacters() {
+    public Flux<CharacterDto> getAllCharacters() {
         logger.info("-- Running GET in thread: {}", Thread.currentThread());
-        return characterRepository.findAll();
+        return characterRepository.findAllNameAndStatus();
     }
 }
 

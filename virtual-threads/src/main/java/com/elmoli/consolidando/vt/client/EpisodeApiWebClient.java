@@ -2,6 +2,7 @@ package com.elmoli.consolidando.vt.client;
 
 
 import com.elmoli.consolidando.vt.repository.Character;
+import com.elmoli.consolidando.vt.repository.CharacterFlux;
 import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
@@ -78,7 +79,7 @@ public class EpisodeApiWebClient
      * @param characterIds A list of character IDs.
      * @return A Flux emitting character information for each character ID.
      */
-    public Flux<Character> getCharacterInfo(List<String> characterIds)
+    public Flux<CharacterFlux> getCharacterInfo(List<String> characterIds)
     {
         return Flux.fromIterable(characterIds)
                 .flatMap(characterId -> getCharacterInfo(Integer.parseInt(characterId)))
@@ -93,12 +94,12 @@ public class EpisodeApiWebClient
      * @param characterId The ID of the character.
      * @return A Mono emitting information about the character.
      */
-    public Mono<Character> getCharacterInfo(int characterId)
+    public Mono<CharacterFlux> getCharacterInfo(int characterId)
     {
         return webClient.get()
                 .uri("/api/character/{id}", characterId)
                 .retrieve()
-                .bodyToMono(Character.class)
+                .bodyToMono(CharacterFlux.class)
                 .onErrorMap(ex -> handleClientError(ex, characterId));
     }
 

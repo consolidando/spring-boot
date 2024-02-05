@@ -9,12 +9,19 @@ spring:
 
 
 
-
 logging:
   level:     
     root: OFF
-    org.postgresql: OFF
+#    io.netty: OFF
+#    reactor: OFF
+#    org.postgresql: TRACE
+#    io.r2dbc.postgresql: TRACE
+#    io.r2dbc.postgresql.QUERY: DEBUG 
+#    io.r2dbc.postgresql.PARAM: DEBUG
+#    io.r2dbc.postgresql.client: TRACE
     com.elmoli.consolidando.vt: INFO
-    org.springframework.data: OFF
-    org.springframework.data.r2dbc: OFF
-    org.springframework.web.reactive.function.client: OFF
+#    io.r2dbc: DEBUG
+#    org.springframework.data: OFF
+    org.springframework.data.r2dbc: DEBUG
+#    org.springframework.web.reactive.function.client: OFF
+#    org.hibernate: DEBUG

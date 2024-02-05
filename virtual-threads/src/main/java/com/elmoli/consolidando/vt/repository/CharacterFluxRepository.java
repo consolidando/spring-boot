@@ -5,15 +5,16 @@
 package com.elmoli.consolidando.vt.repository;
 
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 
 @Profile({"flux"})
-public interface CharacterFluxRepository extends ReactiveCrudRepository<Character, Long> 
+public interface CharacterFluxRepository extends ReactiveCrudRepository<CharacterFlux, Long> 
 {
     
-    //@Query("SELECT c.name AS name, c.status AS status FROM CHARACTER c")
-    //Flux<CharacterDto> findAll();
+    @Query("SELECT c.name AS name, c.status AS status FROM CHARACTERFLUX c")
+    Flux<CharacterDto> findAllNameAndStatus();
 }
 
 
