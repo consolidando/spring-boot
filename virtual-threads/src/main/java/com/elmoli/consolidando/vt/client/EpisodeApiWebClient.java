@@ -60,7 +60,7 @@ public class EpisodeApiWebClient
      * @param episodeId The ID of the episode.
      * @return A Mono emitting a list of characters ids in the episode.
      */
-    public Mono<List<EpisodeCharactersData.Character>> getEpisodeInfo(int episodeId)
+    public Mono<List<EpisodeCharactersIdData.CharacterId>> getEpisodeInfo(int episodeId)
     {
         String graphqlQuery = String.format("{ episode(id: %d) { id characters { id } } }", episodeId);
 
@@ -69,7 +69,7 @@ public class EpisodeApiWebClient
                 .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .bodyValue("{\"query\":\"" + graphqlQuery + "\"}")
                 .retrieve()
-                .bodyToMono(EpisodeCharactersData.class)
+                .bodyToMono(EpisodeCharactersIdData.class)
                 .map(response -> response.data().episode().characters())
                 .map(Collections::unmodifiableList);
     }

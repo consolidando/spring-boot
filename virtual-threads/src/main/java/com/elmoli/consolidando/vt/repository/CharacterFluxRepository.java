@@ -10,11 +10,11 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 
 @Profile({"flux"})
-public interface CharacterFluxRepository extends ReactiveCrudRepository<CharacterFlux, Long> 
+public interface CharacterFluxRepository extends ReactiveCrudRepository<CharacterFlux, Integer> 
 {
     
-    @Query("SELECT c.name AS name, c.status AS status FROM CHARACTERFLUX c")
-    Flux<CharacterDto> findAllNameAndStatus();
+    @Query("SELECT c.name AS name, c.id AS id FROM CHARACTERFLUX c")
+    Flux<CharacterDto> findAllNameAndId();
 }
 
 

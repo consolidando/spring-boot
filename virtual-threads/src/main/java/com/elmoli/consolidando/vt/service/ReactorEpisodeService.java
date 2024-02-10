@@ -5,19 +5,17 @@
 package com.elmoli.consolidando.vt.service;
 
 import com.elmoli.consolidando.vt.repository.CharacterFluxRepository;
-import com.elmoli.consolidando.vt.repository.CharacterRepository;
 import com.elmoli.consolidando.vt.client.EpisodeApiWebClient;
-import com.elmoli.consolidando.vt.client.EpisodeCharactersData;
-import com.elmoli.consolidando.vt.repository.CharacterFlux;
+import com.elmoli.consolidando.vt.client.EpisodeCharactersIdData;
 import java.util.List;
 import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-import com.elmoli.consolidando.vt.service.EpisodeService;
 
 /**
  *
@@ -25,6 +23,12 @@ import com.elmoli.consolidando.vt.service.EpisodeService;
  */
 public class ReactorEpisodeService implements EpisodeService
 {
+
+    @Value("${app.useSaveAllInRepository}")
+    private boolean useSaveAllInRepository;
+
+    @Value("10")
+    private int defaultInt;
 
     private static final Logger logger = LoggerFactory.getLogger(ReactorEpisodeService.class);
     EpisodeApiWebClient episodeApiClient;
@@ -35,7 +39,13 @@ public class ReactorEpisodeService implements EpisodeService
             CharacterFluxRepository characterRepository)
     {
         this.episodeApiClient = episodeApiClient;
-        this.characterRepository = characterRepository;
+        this.characterRepository = characterRepository;        
+    }
+
+    @Override
+    public void logTitle()
+    {
+        logger.info("---- REACTOR SaveAll {} ----", useSaveAllInRepository);
     }
 
     @Override
@@ -53,60 +63,90 @@ public class ReactorEpisodeService implements EpisodeService
     }
 
     @Override
-    public List<EpisodeCharactersData.Character> getEpisodeInfo(Integer episodeId)
+    public List<EpisodeCharactersIdData.CharacterId> getEpisodeInfo(Integer episodeId)
     {
         // 3
-        Mono<List<EpisodeCharactersData.Character>> episodeInfoMono = episodeApiClient.getEpisodeInfo(episodeId);
-        List<EpisodeCharactersData.Character> episodeInfoData = episodeInfoMono.block();
+        Mono<List<EpisodeCharactersIdData.CharacterId>> episodeInfoMono = episodeApiClient.getEpisodeInfo(episodeId);
+        List<EpisodeCharactersIdData.CharacterId> episodeInfoData = episodeInfoMono.block();
         return (episodeInfoData);
     }
 
-    @Override
-    public boolean getAndSaveCharacters(List<EpisodeCharactersData.Character> episodeInfoDataList) throws Exception
+    private boolean getAllandSaveInParallelInRepository(Flux<EpisodeCharactersIdData.CharacterId> charactersFlux)
     {
-        Flux<EpisodeCharactersData.Character> charactersFlux = Flux.fromIterable(episodeInfoDataList);
+        charactersFlux
+                .parallel()
+                .runOn(Schedulers.parallel())
+                .flatMap(character ->
+                {
+                    logger.info("-- {} | Character Id: {}", Thread.currentThread(), character.id());
+                    return (episodeApiClient.getCharacterInfo(character.id()));
+                })
+                .flatMap(characterInfo -> characterRepository.save(characterInfo))
+                .then()
+                .doOnTerminate(() ->
+                {
+                    logger.info("Reactive flow completed.");
+                })
+                .block();
+
+        return (true);
+    }
+
+    private boolean getAllAndSaveAllInRepository(Flux<EpisodeCharactersIdData.CharacterId> charactersFlux)
+    {
+        charactersFlux
+                .parallel()
+                .runOn(Schedulers.parallel())
+                .flatMap(character ->
+                {
+                    logger.info("-- {} | Character Id: {}", Thread.currentThread(), character.id());
+                    return (episodeApiClient.getCharacterInfo(character.id()));
+                })
+                .sequential()
+                .collectList()
+                .flatMap(characterInfos ->
+                {
+                    return characterRepository.saveAll(Flux.fromIterable(characterInfos))
+                            .collectList();
+                })
+                .doFinally(signalType ->
+                {
+                    logger.info("Reactive flow completed with signal: {}", signalType);
+                })
+                .block();
+
+        return (true);
+    }
+
+    public boolean getAndSaveCharacters(List<EpisodeCharactersIdData.CharacterId> episodeInfoDataList) throws Exception
+    {
+        Flux<EpisodeCharactersIdData.CharacterId> charactersFlux = Flux.fromIterable(episodeInfoDataList);
 
         try
         {
-            charactersFlux
-                    .parallel()
-                    .runOn(Schedulers.parallel())
-                    .flatMap(character -> episodeApiClient.getCharacterInfo(character.id()))
-                    .flatMap(characterInfo -> Mono
-                    .fromCallable(() ->
-                    {
-                        // Log character info
-                        logger.info("-- {} | Character Name: {}", Thread.currentThread(), characterInfo.getId());
-                        // Save to repository        
-                        //characterInfo.setId(0);
-                        return (characterRepository.save(characterInfo));
-                    })
-                    .subscribeOn(Schedulers.parallel())
-                    .onErrorResume(e ->
-                    {
-                        errorInProgress = true;
-                        logger.error("Error saving in the repository: {}", e.getMessage());
-                        return Mono.empty();
-                    }))
-                    .sequential()
-                    .collectList()
-                    .flatMap(characterInfos ->
-                    {                                              
-                        return Mono.just(characterInfos); 
-                    })
-                    .doFinally(signalType ->
-                    {
-                        logger.info("Reactive flow completed with signal: {}", signalType);
-                    })
-                    .block()
-                    .forEach(Mono::block);
- 
-            return true;
+            if (useSaveAllInRepository)
+            {
+                getAllandSaveInParallelInRepository(charactersFlux);
+            } else
+            {
+                getAllAndSaveAllInRepository(charactersFlux);
+            }
         } catch (Exception e)
         {
             logger.error("Exception during getAndSaveCharacters: {}", e.getMessage());
-            return false;
+            errorInProgress = true;
         }
+        return true;
+    }
+
+    @Override
+    public boolean getAndSaveAllCharacters(Integer episodeId) throws Exception
+    {
+        //
+        List<EpisodeCharactersIdData.CharacterId> episodeInfoDataList = getEpisodeInfo(episodeId);
+        logger.info("Characters Number: {}", episodeInfoDataList.size());
+
+        return (getAndSaveCharacters(episodeInfoDataList));
     }
 
     @Override
@@ -120,4 +160,5 @@ public class ReactorEpisodeService implements EpisodeService
     {
         return (characterRepository);
     }
+
 }

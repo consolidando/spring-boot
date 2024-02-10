@@ -8,4 +8,4 @@ package com.elmoli.consolidando.vt.repository;
  *
  * @author joanr
  */
-public record CharacterDto(String name, String status){}
+public record CharacterDto(Integer id, String name){}

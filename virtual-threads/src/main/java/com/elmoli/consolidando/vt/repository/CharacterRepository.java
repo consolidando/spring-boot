@@ -14,10 +14,10 @@ import org.springframework.data.repository.CrudRepository;
  * @author joanr
  */
 @Profile({"servlet"})
-public interface CharacterRepository extends CrudRepository<Character, Long>
+public interface CharacterRepository extends CrudRepository<Character, Integer>
 {
-    @Query("SELECT c.name AS name, c.status AS status FROM CHARACTER c")
-    List<CharacterDto> findAllNameAndStatus();
+    @Query("SELECT c.name AS name, c.id AS id FROM CHARACTER c")
+    List<CharacterDto> findAllNameAndId();
 
 }
 

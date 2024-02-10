@@ -1,6 +1,6 @@
 package com.elmoli.consolidando.vt;
 
-import com.elmoli.consolidando.vt.client.EpisodeCharactersData;
+import com.elmoli.consolidando.vt.client.EpisodeCharactersIdData;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.repository.Repository;
 import com.elmoli.consolidando.vt.service.EpisodeService;
+import org.springframework.beans.factory.annotation.Value;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner
-{
-
+{    
     public enum DatabaseState
     {
         NOT_INITIALIZED,
@@ -21,7 +21,8 @@ public class DemoApplication implements CommandLineRunner
         TIMEOUT,
         ERROR
     }
-       
+ 
+    @Value("${app.episode}")
     private int episodeId = 0;
     private DatabaseState dataBaseState = DatabaseState.NOT_INITIALIZED;
 
@@ -45,26 +46,20 @@ public class DemoApplication implements CommandLineRunner
 
         try
         {
-                                                
+            episodeApi.logTitle();
+            
             logger.info("-- Running run in thread: {}", Thread.currentThread());
             long startTime = System.currentTimeMillis();
-
-            // Rpisode Id
-            if (args.length == 1)
-            {
-                episodeId = Integer.parseInt(args[0]);
-            } else
+           
+            if (episodeId == 0)
             {
                 episodeId = episodeApi.getRandomEpisodeId();
             }
             logger.info("Episode Number: {}", episodeId);
-
-            //
-            List<EpisodeCharactersData.Character> episodeInfoDataList = episodeApi.getEpisodeInfo(episodeId);
-            logger.info("Characters Number: {}", episodeInfoDataList.size());
+            
 
             //    
-            if (episodeApi.getAndSaveCharacters(episodeInfoDataList))
+            if (episodeApi.getAndSaveAllCharacters(episodeId))
             {
                 if (episodeApi.isErrorInProgress() == true)
                 {

@@ -1,5 +1,7 @@
 app:
-  rick-and-Morty-api-url: https://rickandmortyapi.com
+  rick-and-Morty-api-url: https://rickandmortyapi.com  
+  useSaveAllInRepository: true
+  episode: 0
       
 spring:
   application:
@@ -10,7 +12,7 @@ spring:
 
 
 logging:
-  level:     
+  level: 
     root: OFF
 #    io.netty: OFF
 #    reactor: OFF
@@ -22,6 +24,6 @@ logging:
     com.elmoli.consolidando.vt: INFO
 #    io.r2dbc: DEBUG
 #    org.springframework.data: OFF
-    org.springframework.data.r2dbc: DEBUG
+#    org.springframework.data.r2dbc: DEBUG
 #    org.springframework.web.reactive.function.client: OFF
 #    org.hibernate: DEBUG

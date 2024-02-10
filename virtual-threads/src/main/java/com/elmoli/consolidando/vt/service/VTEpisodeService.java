@@ -7,7 +7,7 @@ package com.elmoli.consolidando.vt.service;
 import com.elmoli.consolidando.vt.repository.Character;
 import com.elmoli.consolidando.vt.repository.CharacterRepository;
 import com.elmoli.consolidando.vt.client.EpisodeApiRestClient;
-import com.elmoli.consolidando.vt.client.EpisodeCharactersData;
+import com.elmoli.consolidando.vt.client.EpisodeCharactersIdData;
 import java.util.List;
 import java.util.Random;
 import org.slf4j.Logger;
@@ -42,26 +42,23 @@ public abstract class VTEpisodeService implements EpisodeService
     }
 
     @Override
-    public List<EpisodeCharactersData.Character> getEpisodeInfo(Integer episodeId)
+    public List<EpisodeCharactersIdData.CharacterId> getEpisodeInfo(Integer episodeId)
     {
         return (episodeApiClient.getEpisodeInfo(episodeId));
     }
 
-    public Character getCharacterInfo(Integer characterId)
+    public Character getCharacter(Integer characterId)
     {
+        logger.info("-- {} | Character Id: {}", Thread.currentThread(), characterId);
         return (episodeApiClient.getCharacterInfo(characterId));
     }
 
-    @Override
-    public abstract boolean getAndSaveCharacters(List<EpisodeCharactersData.Character> episodeInfoDataList) throws Exception;
-
-    public void getAndSaveCharacterInfo(EpisodeCharactersData.Character episodeInfoData)
+    public void getAndSaveCharacter(EpisodeCharactersIdData.CharacterId episodeInfoData)
     {
         try
         {
-            Character characterInfo = getCharacterInfo(episodeInfoData.id());
-            logger.info("-- {} | Character Id: {}", Thread.currentThread(), characterInfo.id());
-            characterRepository.save(characterInfo);
+            Character character = getCharacter(episodeInfoData.id());            
+            characterRepository.save(character);
         } catch (Exception e)
         {
             errorInProgress = true;
@@ -76,7 +73,7 @@ public abstract class VTEpisodeService implements EpisodeService
     }       
     
     @Override
-    public Repository getRepository()
+    public CharacterRepository getRepository()
     {
         return(characterRepository);
     }

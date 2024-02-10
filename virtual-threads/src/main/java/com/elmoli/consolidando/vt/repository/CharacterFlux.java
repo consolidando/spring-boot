@@ -30,7 +30,7 @@ public class CharacterFlux implements Persistable<Integer>
 {
 
     @Id
-    private int id;
+    private Integer id;
 
     @Version
     private Integer version;
