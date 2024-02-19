@@ -1,7 +1,9 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Copyright (c) 2024 joanribalta@elmolidelanoguera.com
+ * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+ * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
+
 package com.elmoli.consolidando.vt.service;
 
 import com.elmoli.consolidando.vt.repository.Character;
@@ -12,7 +14,6 @@ import java.util.List;
 import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.repository.Repository;
 
 /**
  *

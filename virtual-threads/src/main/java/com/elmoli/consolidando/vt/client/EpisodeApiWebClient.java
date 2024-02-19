@@ -1,7 +1,12 @@
+/*
+ * Copyright (c) 2024 joanribalta@elmolidelanoguera.com
+ * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+ * Blog Consolidando: https://diy.elmolidelanoguera.com/
+ */
+
 package com.elmoli.consolidando.vt.client;
 
 
-import com.elmoli.consolidando.vt.repository.Character;
 import com.elmoli.consolidando.vt.repository.CharacterFlux;
 import java.util.Collections;
 import java.util.List;

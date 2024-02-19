@@ -1,22 +1,19 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Copyright (c) 2024 joanribalta@elmolidelanoguera.com
+ * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+ * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
+
 package com.elmoli.consolidando.vt.service;
 
-import com.elmoli.consolidando.vt.service.VTEpisodeService;
 import com.elmoli.consolidando.vt.repository.CharacterRepository;
 import com.elmoli.consolidando.vt.repository.Character;
 import com.elmoli.consolidando.vt.client.EpisodeApiRestClient;
 import com.elmoli.consolidando.vt.client.EpisodeCharactersIdData;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;

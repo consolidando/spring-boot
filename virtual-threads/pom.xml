@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.elmoli.consolidando</groupId>
     <artifactId>vt</artifactId>
-    <version>1</version>
+    <version>3</version>
     <name>virtual-threads</name>
     <description>Virtual Threads in Spring Boot Start up</description>                
     <properties>
@@ -23,7 +23,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>            
-                <spring.profiles.active>simple,servlet</spring.profiles.active>  
+                <spring.profiles.active>graphql,servlet</spring.profiles.active>  
                 <activemavenprofile>servlet</activemavenprofile>                              
             </properties>     
             <dependencies>
@@ -40,6 +40,12 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-data-jdbc</artifactId>
                 </dependency>     
+                
+                <dependency>    
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+                </dependency>
+                
             </dependencies>                                
         </profile>    
         <profile>
@@ -72,18 +78,7 @@
                     <artifactId>r2dbc-postgresql</artifactId>
                     <scope>runtime</scope>
                 </dependency>
-                
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-actuator</artifactId>
-                </dependency>
-                
-                <dependency>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                    <optional>true</optional>
-                </dependency>
-                               
+                                                             
                 <dependency> <!-- ONLY FOR COMPILING NO REACTIVE PART -->
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-data-jdbc</artifactId>
@@ -94,6 +89,11 @@
         </profile> 
     </profiles>
     <dependencies>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -111,21 +111,30 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>          
+        
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
             <scope>test</scope>
         </dependency>         
+        
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>r2dbc</artifactId>
             <scope>test</scope>
-        </dependency>                                                
+        </dependency>          
+        
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>                                      
                 
     </dependencies>
 

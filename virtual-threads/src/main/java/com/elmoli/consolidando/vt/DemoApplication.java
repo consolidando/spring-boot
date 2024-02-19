@@ -1,7 +1,11 @@
+/*
+ * Copyright (c) 2024 joanribalta@elmolidelanoguera.com
+ * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+ * Blog Consolidando: https://diy.elmolidelanoguera.com/
+ */
+
 package com.elmoli.consolidando.vt;
 
-import com.elmoli.consolidando.vt.client.EpisodeCharactersIdData;
-import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

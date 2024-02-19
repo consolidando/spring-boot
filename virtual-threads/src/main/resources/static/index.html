@@ -8,7 +8,7 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <base href="/" />
-        <script src="characters.js?v=0"></script>
+        <script src="characters.js?v=15"></script>
         <style>
             :root
             {
@@ -34,6 +34,16 @@
             {
                 text-decoration: none;
             }
+            
+            button:active 
+            {
+                background-color: lightgray; 
+            }
+
+            button:focus 
+            {
+                outline: none;
+            }
         </style>
     </head>        
     <body>
@@ -41,12 +51,13 @@
             <h1>Virtual Threads</h1>
 
             <div style="display: flex; flex-wrap: wrap; gap: 10px">
+                <button id="beforeTest"  >Before test</button>
                 <button id="startTest"  >Start test</button>                
             </div>
         </main>
-        <footer style="text-align:center;">© 2024 footer info</footer>
+        <footer style="text-align:center;">© 2024 Consolidando</footer>
         <script>
-            characterStartUp("startTest");
+            characterStartUp("beforeTest" ,"startTest");
         </script>
     </body>
 

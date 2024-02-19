@@ -1,13 +1,14 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Copyright (c) 2024 joanribalta@elmolidelanoguera.com
+ * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+ * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
+
 package com.elmoli.consolidando.vt.controller;
 
 import com.elmoli.consolidando.vt.repository.Character;
 import com.elmoli.consolidando.vt.repository.CharacterDto;
 import com.elmoli.consolidando.vt.repository.CharacterRepository;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -24,9 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @author joanr
  */
 @Profile(
-{
-    "servlet"
-})
+        {
+            "servlet"
+        })
 @RestController
 @RequestMapping("apis/characters")
 public class CharacterController
@@ -43,11 +44,15 @@ public class CharacterController
     @GetMapping("/{id}")
     public ResponseEntity<Character> getCharacter(@PathVariable Integer id)
     {
-        logger.info("-- Running GET in thread: {}", Thread.currentThread());
+        long startTime = System.currentTimeMillis(); 
 
         Optional<Character> characterOptional = characterRepository.findById(id);
         if (characterOptional.isPresent())
         {
+            long elapsedTime = System.currentTimeMillis() - startTime; 
+            logger.info("-- Running GET in thread: {}. find time: {} ms", 
+                    Thread.currentThread(), elapsedTime);
+
             Character character = characterOptional.get();
             return ResponseEntity.ok(character);
         } else
