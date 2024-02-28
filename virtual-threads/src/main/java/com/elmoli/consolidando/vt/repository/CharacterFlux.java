@@ -3,13 +3,13 @@
  * License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
  * Blog Consolidando: https://diy.elmolidelanoguera.com/
  */
-
 package com.elmoli.consolidando.vt.repository;
 
 /**
  *
  * @author joanr
  */
+import com.elmoli.consolidando.vt.client.EpisodeCharactersData;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Column;
@@ -18,6 +18,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -92,5 +93,26 @@ public class CharacterFlux implements Persistable<Integer>
 
         private String name;
         private String url;
+    }
+
+    public static CharacterFlux of(EpisodeCharactersData.Character character)
+    {
+        List<String> episodeIds = character.episode().stream()
+                .map(map -> map.id())
+                .collect(Collectors.toList());
+
+        CharacterFlux entity = new CharacterFlux();
+
+        entity.setId(character.id());
+        entity.setName(character.name());
+        entity.setStatus(character.status());
+        entity.setSpecies(character.species());
+        entity.setType(character.gender());
+        entity.setImage(character.image());
+        entity.setEpisode(episodeIds);
+        entity.setUrl(String.valueOf(character.id()));
+        entity.setCreated(character.created());
+
+        return entity;
     }
 }

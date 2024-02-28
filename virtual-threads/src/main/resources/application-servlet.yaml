@@ -1,3 +1,7 @@
+#server:
+#  tomcat:
+#    mbeanregistry:
+#      enabled: true
 spring:  
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration    
@@ -8,9 +12,9 @@ spring:
     username: user
     password: password
     url: jdbc:postgresql://localhost:5432/character
-    hikari:
-      connection-timeout: 2000
-      maximum-pool-size: 5
+#    hikari:
+#      connection-timeout: 4000
+#      maximum-pool-size: 5
   sql:
     init:
       mode: always
@@ -25,9 +29,4 @@ spring:
 #      ddl-auto: create
 
       
-#springdoc:
-#  api-docs:
-#    path: /apis-docs
-#  swagger-ui:
-#    path: /swagger-ui.html
-#    enabled: true          
+     

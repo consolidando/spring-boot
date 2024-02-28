@@ -29,9 +29,6 @@ public class ReactorEpisodeService implements EpisodeService
     @Value("${app.useSaveAllInRepository}")
     private boolean useSaveAllInRepository;
 
-    @Value("10")
-    private int defaultInt;
-
     private static final Logger logger = LoggerFactory.getLogger(ReactorEpisodeService.class);
     EpisodeApiWebClient episodeApiClient;
     CharacterFluxRepository characterRepository;
@@ -48,6 +45,7 @@ public class ReactorEpisodeService implements EpisodeService
     public void logTitle()
     {
         logger.info("---- REACTOR SaveAll {} ----", useSaveAllInRepository);
+        
     }
 
     @Override

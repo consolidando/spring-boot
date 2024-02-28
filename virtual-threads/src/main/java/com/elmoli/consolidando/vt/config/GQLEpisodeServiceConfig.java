@@ -8,7 +8,7 @@ package com.elmoli.consolidando.vt.config;
 import com.elmoli.consolidando.vt.client.EpisodeApiRestClient;
 import com.elmoli.consolidando.vt.repository.CharacterRepository;
 import com.elmoli.consolidando.vt.service.EpisodeService;
-import com.elmoli.consolidando.vt.service.GraphQlEpisodeService;
+import com.elmoli.consolidando.vt.service.GQLEpisodeService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -20,12 +20,12 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("graphql")
-public class GraphQlEpisodeServiceConfig
+public class GQLEpisodeServiceConfig
 {
         @Bean
     public EpisodeService episodiApi(EpisodeApiRestClient episodeApiClient,
             CharacterRepository characterRepository)
     {
-        return new GraphQlEpisodeService(episodeApiClient, characterRepository);
+        return new GQLEpisodeService(episodeApiClient, characterRepository);
     }
 }

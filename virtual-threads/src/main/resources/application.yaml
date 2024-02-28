@@ -10,11 +10,11 @@ spring:
     active: @spring.profiles.active@
     
     
-management:
-  endpoints:
-    web:
-      exposure:
-        include: metrics
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: metrics
 
 
 logging:
@@ -33,3 +33,5 @@ logging:
 #    org.springframework.data.r2dbc: DEBUG
 #    org.springframework.web.reactive.function.client: OFF
 #    org.hibernate: DEBUG
+#    org.apache.tomcat: INFO
+#    org.apache.catalina: INFO

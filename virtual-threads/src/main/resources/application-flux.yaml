@@ -3,10 +3,10 @@ spring:
     url: ${SPRING_DATASOURCE_URL:r2dbc:postgresql://localhost:5432/character}
     username: user
     password: password
-    pool:
-      max-create-connection-time: 2s
-      initial-size: 5
-      max-size: 10
+#    pool:
+#      max-create-connection-time: 2s
+#      initial-size: 5
+#      max-size: 10
     initialization-mode: always
 #  data:
 #    r2dbc:

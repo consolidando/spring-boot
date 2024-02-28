@@ -20,15 +20,15 @@ import org.springframework.data.repository.Repository;
  *
  * @author joanr
  */
-public class GraphQlEpisodeService implements EpisodeService
+public class GQLEpisodeService implements EpisodeService
 {
 
-    private static final Logger logger = LoggerFactory.getLogger(GraphQlEpisodeService.class);
+    private static final Logger logger = LoggerFactory.getLogger(GQLEpisodeService.class);
     EpisodeApiRestClient episodeApiClient;
     CharacterRepository characterRepository;
     private boolean errorInProgress = false;
 
-    public GraphQlEpisodeService(EpisodeApiRestClient episodeApiClient,
+    public GQLEpisodeService(EpisodeApiRestClient episodeApiClient,
             CharacterRepository characterRepository)
     {
         this.characterRepository = characterRepository;
