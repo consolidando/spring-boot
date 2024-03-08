@@ -25,7 +25,7 @@ import org.springframework.web.client.RestClient;
 @Service
 @Profile(
 {
-    "simple", "executors", "graphql"
+    "servlet"
 })
 public class EpisodeApiRestClient
 {

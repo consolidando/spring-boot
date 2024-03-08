@@ -6,13 +6,9 @@
 
 package com.elmoli.consolidando.vt.config;
 
-import com.elmoli.consolidando.vt.service.ReactorEpisodeService;
-import com.elmoli.consolidando.vt.repository.CharacterFluxRepository;
-import com.elmoli.consolidando.vt.client.EpisodeApiWebClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import com.elmoli.consolidando.vt.service.EpisodeService;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer;
@@ -25,9 +21,9 @@ import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
 @Configuration
 @Profile(
         {
-            "reactor"
+            "flux"
         })
-public class ReactorEpisodeServiceConfig
+public class ReactiveDatabaseConfig
 {
 
     @Bean
@@ -39,13 +35,6 @@ public class ReactorEpisodeServiceConfig
         initializer.setDatabasePopulator(new ResourceDatabasePopulator(new ClassPathResource("schemaflux.sql")));
 
         return initializer;
-    }
-
-    @Bean
-    public EpisodeService episodiApi(EpisodeApiWebClient episodeApiClient,
-            CharacterFluxRepository characterFluxRepository)
-    {
-        return new ReactorEpisodeService(episodeApiClient, characterFluxRepository);
     }
 
 }

@@ -1,3 +1,5 @@
+app:
+  episode-service: graphql  # simple, executors, graphql
 #server:
 #  tomcat:
 #    mbeanregistry:

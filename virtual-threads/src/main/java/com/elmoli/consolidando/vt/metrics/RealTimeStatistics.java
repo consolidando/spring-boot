@@ -13,8 +13,8 @@ import java.util.concurrent.atomic.LongAdder;
 public class RealTimeStatistics
 {
 
-    private static final AtomicLong minimumRequestTimeInNs = new AtomicLong(1000_000_000L);
-    private static final AtomicLong maximumRequestTimeInNs = new AtomicLong(0L);
+    private final AtomicLong minimumRequestTimeInNs = new AtomicLong(1000_000_000L);
+    private final AtomicLong maximumRequestTimeInNs = new AtomicLong(0L);
     private final DoubleAdder sum = new DoubleAdder(); // Sum of all values
     private final DoubleAdder sumOfSquares = new DoubleAdder(); // Sum of squares of all values
     private final LongAdder count = new LongAdder(); // Count of values

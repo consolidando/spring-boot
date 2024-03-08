@@ -1,3 +1,5 @@
+app:
+  episode-service: reactor-gql  # reactor-gql reactor
 spring:
   r2dbc:
     url: ${SPRING_DATASOURCE_URL:r2dbc:postgresql://localhost:5432/character}

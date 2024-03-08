@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.elmoli.consolidando</groupId>
     <artifactId>vt</artifactId>
-    <version>3</version>
+    <version>5</version>
     <name>virtual-threads</name>
     <description>Virtual Threads in Spring Boot Start up</description>                
     <properties>
@@ -18,13 +18,13 @@
     </properties>
     <profiles>        
         <profile>
-            <id>servlet</id>                       
+            <id>tomcat</id>                       
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>            
-                <spring.profiles.active>graphql,servlet</spring.profiles.active>  
-                <activemavenprofile>servlet</activemavenprofile>                              
+                <spring.profiles.active>servlet</spring.profiles.active>  
+                <activemavenprofile>tomcat</activemavenprofile>                              
             </properties>     
             <dependencies>
                 <dependency>
@@ -51,7 +51,7 @@
         <profile>
             <id>netty</id>
             <properties>            
-                <spring.profiles.active>reactor,flux</spring.profiles.active>
+                <spring.profiles.active>flux</spring.profiles.active>
                 <activemavenprofile>netty</activemavenprofile>                
             </properties>
             <dependencies> 
@@ -90,10 +90,10 @@
     </profiles>
     <dependencies>
         
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+        </dependency>-->
         
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -144,7 +144,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!--                <executions>
+                <executions>
                     <execution>
                         <goals>
                             <goal>build-image</goal>
@@ -152,11 +152,11 @@
                         <configuration>
                             <imageName>${project.artifactId}-${activemavenprofile}:${project.version}</imageName>
                             <environment>
-                                <BP_JVM_VERSION>21.*</BP_JVM_VERSION>
+                                <BP_JVM_VERSION>21</BP_JVM_VERSION>
                             </environment>
                         </configuration>
                     </execution>
-                </executions>-->
+                </executions>
             </plugin>
         </plugins>
     </build>

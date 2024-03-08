@@ -26,7 +26,7 @@ import reactor.core.publisher.Mono;
 @Service
 @Profile(
         {
-            "reactor", "reactor-gql"
+            "flux"
         })
 public class EpisodeApiWebClient
 {
