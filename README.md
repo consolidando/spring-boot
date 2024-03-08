@@ -12,4 +12,4 @@ We use `Google Sign-In` to generate an `ID token` in the browser application, wh
 
 ## virtual-threads
 
-Virtual Threads versus Project Reactor in Spring
+Testing the performance of Spring Boot with Virtual Threads in Tomcat versus Reactor Netty.
