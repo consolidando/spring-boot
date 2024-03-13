@@ -13,3 +13,7 @@ We use `Google Sign-In` to generate an `ID token` in the browser application, wh
 ## virtual-threads
 
 Testing the performance of Spring Boot with Virtual Threads in Tomcat versus Reactor Netty.
+
+## License
+
+This project is licensed under the [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) License. See the [LICENSE](LICENSE.md) file for details.
