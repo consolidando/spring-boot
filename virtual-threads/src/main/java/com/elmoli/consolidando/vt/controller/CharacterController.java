@@ -14,6 +14,7 @@ import com.elmoli.consolidando.vt.repository.CharacterRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -37,13 +38,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class CharacterController
 {
 
-    private static final Logger logger = LoggerFactory.getLogger(CharacterController.class);
-    private final CharacterRepository characterRepository;
-    
+    private static final Logger logger = LoggerFactory.getLogger(CharacterController.class);        
     // 
-    private final RealTimeStatistics getIdRealTimeStatistics = new RealTimeStatistics();
+    private static final RealTimeStatistics getIdRealTimeStatistics = new RealTimeStatistics();
     private static final AtomicLong getIdConcurrentRequest = new AtomicLong(0L);
     private static final AtomicLong getIdMaximumConcurrentRequest = new AtomicLong(0L);
+    
+    private final CharacterRepository characterRepository;
 
     public CharacterController(CharacterRepository characterRepository)
     {
@@ -85,7 +86,7 @@ public class CharacterController
         
         long concurrentRequest = getIdConcurrentRequest.incrementAndGet(); 
         getIdMaximumConcurrentRequest.updateAndGet(current -> Math.max(current, concurrentRequest));
-        
+                       
         Optional<Character> characterOptional = characterRepository.findById(id);
         
         getIdConcurrentRequest.decrementAndGet();

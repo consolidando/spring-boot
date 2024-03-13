@@ -1,9 +1,19 @@
+# ------------------
 app:
-  episode-service: graphql  # simple, executors, graphql
-#server:
+  tomcat:  
+    virtual-threads:
+      concurrency-limit: 200
+  episode-service: graphql  # simple, executors, graphql  
+
+# ------------------
+#server: 
 #  tomcat:
+#    threads: 
+#      max: 100
 #    mbeanregistry:
 #      enabled: true
+
+# ------------------
 spring:  
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration    
@@ -20,6 +30,10 @@ spring:
   sql:
     init:
       mode: always
+#  task:
+#    execution:
+#      simple:
+#        concurrency-limit: 200
       
   data:
     r2dbc:

@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.2</version>
+        <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.elmoli.consolidando</groupId>
     <artifactId>vt</artifactId>
-    <version>5</version>
+    <version>6</version>
     <name>virtual-threads</name>
     <description>Virtual Threads in Spring Boot Start up</description>                
     <properties>

@@ -5,8 +5,8 @@ services:
   vt-servlet-service:
     depends_on:
       - postgres-service
-    image: "ghcr.io/consolidando/vt-tomcat:5"
-    container_name: "vt-tomcat-with-vt"
+    image: "ghcr.io/consolidando/vt-tomcat:6"
+    container_name: "vt-tomcat-with-vt-limited"
     ports:
       - 8080:8080
       - 8001:8001 # debug
@@ -19,7 +19,7 @@ services:
       - SPRING_PROFILES_ACTIVE=servlet
       - BPL_JMX_ENABLED=true
       - BPL_JMX_PORT=5000    
-      - JAVA_TOOL_OPTIONS= -XX:ActiveProcessorCount=3
+      - JAVA_TOOL_OPTIONS= -XX:ActiveProcessorCount=3 
       # - JAVA_TOOL_OPTIONS= -Dserver.tomcat.accesslog.enabled=true
       # - JAVA_TOOL_OPTIONS= -Dlogging.level.org.apache.tomcat=INFO -Dlogging.level.org.apache.catalina=INFO
       # - JAVA_TOOL_OPTIONS= -Dlogging.level.root=INFO
