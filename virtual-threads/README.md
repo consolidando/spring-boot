@@ -14,7 +14,7 @@ There are two Maven profiles defined in the project:
 
 2. **netty**: This profile configures the application to run with Netty server based on event loop. It sets the active Spring profile to `flux`.
 
-## Properties
+## Properties for the Tomcat version
 
 - `spring.threads.virtual.enabled`: `true` or `false` - enables virtual threads.
 - `app.tomcat.virtual-threads.concurrency-limit`: `-1` for no limit, a number for maximum concurrency of virtual threads.
