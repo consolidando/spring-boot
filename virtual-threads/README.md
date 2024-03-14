@@ -10,9 +10,9 @@ based on event loop in Netty, or a servlet version based on the thread-per-reque
 
 There are two Maven profiles defined in the project:
 
-1. **tomcat**: This profile is activated by default and configures the application to run with Tomcat server in the thread-per-request model. It sets the active Spring profile to "servlet".
+1. **tomcat**: This profile is activated by default and configures the application to run with Tomcat server in the thread-per-request model. It sets the active Spring profile to `servlet`.
 
-2. **netty**: This profile configures the application to run with Netty server based on event loop. It sets the active Spring profile to "flux".
+2. **netty**: This profile configures the application to run with Netty server based on event loop. It sets the active Spring profile to `flux`.
 
 ## Properties
 
